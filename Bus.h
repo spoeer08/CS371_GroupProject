@@ -8,20 +8,20 @@ class Bus {
 
 private:
 	string ID;
-	string source;
-	string destination;
-	double distance;
+	string type;
+	bool availability;
+	int seats;
 
 public:
-	Bus(string, string, string, double);
+	Bus(string, string, bool, int);
 	void setID(string);
-	void setSource(string);
-	void setDestination(string);
-	void setDistance(double);
+	void setType(string);
+	void setAvailability(bool);
+	void setSeats(int);
 	string getID() const;
-	string getSource() const;
-	string getDestination() const;
-	double getDistance() const;
+	string getType() const;
+	bool getAvailability() const;
+	int getSeats() const;
 	void printBusInfo();
 };
 

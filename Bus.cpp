@@ -3,45 +3,47 @@
 
 using namespace std;
 
-Bus::Bus(string id, string s, string d, double dist) {
+
+Bus::Bus(string id, string t, bool a, int s) {
 	setID(id);
-	setSource(s);
-	setDestination(d);
-	setDistance(dist);
+	setType(t);
+	setAvailability(a);
+	setSeats(s);
 }
 
 void Bus::setID(string id) {
 	ID = id;
 }
 
-void Bus::setSource(string s) {
-	source = s;
+void Bus::setType(string t) {
+	type = t;
 }
 
-void Bus::setDestination(string d) {
-	destination = d;
+void Bus::setAvailability(bool a) {
+	availability = a;
 }
 
-void Bus::setDistance(double dist) {
-	distance = dist;
+void Bus::setSeats(int s) {
+	seats = s;
 }
 
 string Bus::getID() const {
 	return ID;
 }
 
-string Bus::getSource()const {
-	return source;
+string Bus::getType() const {
+	return type;
 }
 
-string Bus::getDestination() const {
-	return destination;
+bool Bus::getAvailability() const {
+	return availability;
 }
 
-double Bus::getDistance() const {
-	return distance;
+int Bus::getSeats() const {
+	return seats;
 }
+
 
 void Bus::printBusInfo() {
-	cout << getID() << "\t" << getSource() << "\t" << getDestination() << "\t" << getDistance() << endl;
+	cout << getID() << "\t" << getType() << "\t" << getAvailability() << "\t" << getSeats() << endl;
 }
