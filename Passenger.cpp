@@ -70,8 +70,6 @@ int Passenger::getTickets() const {
 	return tickets;
 }
 
-void Passenger::printInfo() {
+void Passenger::printPassInfo() {
 	cout << getName() << "\t" << getAddress() << "\t" << getPhone() << "\t" << getEmail() << "\t" << getDate() << "\t" << getTickets() << "\n";
-
-
 }
