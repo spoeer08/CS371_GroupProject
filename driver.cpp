@@ -13,11 +13,21 @@ int main() {
 	int tickets;
 
 	Passenger p1; //Passenger object
-	Bus bus1("0001", "Green Bay", "Madison", 135.6); //Bus object
-	Bus bus2("0002", "Green Bay", "Milwaukee", 118.7); //Bus object
-	Bus bus3("0003", "Green Bay", "Whitewater", 142.2); //Bus object
-	Bus bus4("0004", "Green Bay", "Oshkosh", 50.4); //Bus object
-	Bus bus5("0005", "Green Bay", "Eau Claire", 194.4); //Bus object
+
+	//Create all bus objects (3 luxury, 4 small, 4 minivans)
+	Bus lux1("01", "luxury", true, 52);
+	Bus lux2("02", "luxury", true, 52); 
+	Bus lux3("03", "luxury", true, 52); 
+	Bus small1("04", "small", true, 36);
+	Bus small2("05", "small", true, 36);
+	Bus small3("06", "small", true, 36);
+	Bus small4("07", "small", true, 36);
+	Bus mini1("08", "mini", true, 12);
+	Bus mini2("09", "mini", true, 12);
+	Bus mini3("10", "mini", true, 12);
+	Bus mini4("11", "mini", true, 12);
+	
+
 
 
 	cout << "Welcome to the Reservation Menu!\n";
@@ -48,10 +58,17 @@ int main() {
 	p1.setTickets(tickets);
 
 	p1.printPassInfo();
-	bus1.printBusInfo();
-	bus2.printBusInfo();
-	bus3.printBusInfo();
-	bus4.printBusInfo();
+	lux1.printBusInfo();
+	lux2.printBusInfo();
+	lux3.printBusInfo();
+	small1.printBusInfo();
+	small2.printBusInfo();
+	small3.printBusInfo();
+	small4.printBusInfo();
+	mini1.printBusInfo();
+	mini2.printBusInfo();
+	mini3.printBusInfo();
+	mini4.printBusInfo();
 
 
 	return 0;
