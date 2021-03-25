@@ -29,7 +29,7 @@ public:
 	string getEmail() const;
 	string getDate() const;
 	int getTickets() const;
-	void printInfo();
+	void printPassInfo();
 };
 
 #endif
