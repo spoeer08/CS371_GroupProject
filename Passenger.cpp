@@ -1,5 +1,6 @@
 #include "Passenger.h"
 #include <iostream>
+#include "Reservation.h"
 
 using namespace std;
 
@@ -8,17 +9,15 @@ Passenger::Passenger() { //Default Constructor
 	setAddress("123 Lucky Street Green Bay, WI 54301");
 	setPhone("123 - 456 - 7890");
 	setEmail("bob@yahoo.com");
-	setDate("3/25/2021");
 	setTickets(1);
 
 }
 
-Passenger::Passenger(string n, string a, string p, string e, string d, int t) { //Parameterized Constructor
+Passenger::Passenger(string n, string a, string p, string e, int t) { //Parameterized Constructor
 	setName(n);
 	setAddress(a);
 	setPhone(p);
 	setEmail(e);
-	setDate(d);
 	setTickets(t);
 }
 
@@ -36,10 +35,6 @@ void Passenger::setPhone(string p) {
 
 void Passenger::setEmail(string e) {
 	email = e;
-}
-
-void Passenger::setDate(string d) {
-	date = d;
 }
 
 void Passenger::setTickets(int t) {
@@ -62,14 +57,29 @@ string Passenger::getEmail() const {
 	return email;
 }
 
-string Passenger::getDate() const {
-	return date;
-}
-
 int Passenger::getTickets() const {
 	return tickets;
 }
 
 void Passenger::printPassInfo() {
-	cout << getName() << "\t" << getAddress() << "\t" << getPhone() << "\t" << getEmail() << "\t" << getDate() << "\t" << getTickets() << "\n";
+	cout << getName() << "\t" << getAddress() << "\t" << getPhone() << "\t" << getEmail() << "\t" << getTickets() << "\n";
+}
+
+
+void Passenger::makeReservation(Passenger p) {
+	int day;
+	int month;
+	int year;
+
+	cout << "Please enter the reservation details\n";
+	cout << "Day:";
+	cin >> day;
+	cout << "Month:";
+	cin >> month;
+	cout << "Year:";
+	cin >> year;
+
+	Reservation r1(day, month, year);
+
+	
 }
