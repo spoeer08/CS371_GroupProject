@@ -4,14 +4,14 @@
 using namespace std;
 
 
-Bus::Bus(string id, string t, bool a, int s) {
+Bus::Bus(int id, string t, bool a, int s) {
 	setID(id);
 	setType(t);
 	setAvailability(a);
 	setSeats(s);
 }
 
-void Bus::setID(string id) {
+void Bus::setID(int id) {
 	ID = id;
 }
 
@@ -27,7 +27,7 @@ void Bus::setSeats(int s) {
 	seats = s;
 }
 
-string Bus::getID() const {
+int Bus::getID() const {
 	return ID;
 }
 
