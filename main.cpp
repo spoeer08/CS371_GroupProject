@@ -2,22 +2,12 @@
 #include <vector>
 #include "Passenger.h"
 #include "Bus.h"
-#include "Fleet.h"
 using namespace std;
 
 
-string name;
-string address;
-string phone;
-string email;
-string date;
-int tickets;
-int ID;
-string type;
-bool availability;
-int seats;
 
-//Rates variables
+
+//Global variables
 double luxASeat = 0.95;
 double luxWSeat = 0.95;
 double luxOSeat = 0.75;
@@ -35,7 +25,18 @@ double miniMileCost = 0.15;
 int miniDeposit = 1500;
 int rateOption;
 double taxRate = 0.10;
+string name;
+string address;
+string phone;
+string email;
+string date;
+int tickets;
+int ID;
+string type;
+bool availability;
+int seats;
 
+//Vectors
 vector<Passenger> curPassengers;
 vector<Bus> curFleet;
 
@@ -59,17 +60,39 @@ void printVector(const vector<Passenger>&);
 void mainMenu();
 void fillRates();
 void getRates();
-void fillBus(vector<Bus>& newCurFleet);
+void fillBus(vector<Bus>&);
+void printBus(const vector<Bus>&);
 void adminMenu();
+void initialMenu();
 
 
 
 int main() {
 	
-	//adminMenu();
-	mainMenu();
+	initialMenu();
 
 	return 0;
+}
+
+void initialMenu() {
+	int initialOption;
+
+	cout << "FLIXBUX System Menu\n";
+	cout << "Please select an option below:\n";
+	cout << "1. Main Menu\n";
+	cout << "2. Admin Menu\n";
+	cin >> initialOption;
+
+	switch (initialOption) {
+	case 1:
+		mainMenu();
+		break;
+	case 2:
+		adminMenu();
+		break;
+	default:
+		exit(1);
+	}
 }
 
 
@@ -253,6 +276,7 @@ void adminMenu() { //Admin Menu
 
 	case 1:
 		fillBus(curFleet);
+		printBus(curFleet);
 		break;
 
 	case 2:
@@ -288,7 +312,7 @@ void adminMenu() { //Admin Menu
 			cin >> ID;
 			cout << "Enter bus type: " << endl;
 			cin >> type;
-			cout << "Enter availability: " << endl;
+			cout << "Enter availability: (0=No, 1=yes) " << endl;
 			cin >> availability;
 			cout << "Enter seats: " << endl;
 			cin >> seats;
