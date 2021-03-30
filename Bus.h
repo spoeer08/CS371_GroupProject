@@ -7,18 +7,18 @@ using namespace std;
 class Bus {
 
 private:
-	string ID;
+	int ID;
 	string type;
 	bool availability;
 	int seats;
 
 public:
-	Bus(string, string, bool, int);
-	void setID(string);
+	Bus(int, string, bool, int);
+	void setID(int);
 	void setType(string);
 	void setAvailability(bool);
 	void setSeats(int);
-	string getID() const;
+	int getID() const;
 	string getType() const;
 	bool getAvailability() const;
 	int getSeats() const;
