@@ -65,21 +65,3 @@ void Passenger::printPassInfo() {
 	cout << getName() << "\t" << getAddress() << "\t" << getPhone() << "\t" << getEmail() << "\t" << getTickets() << "\n";
 }
 
-
-void Passenger::makeReservation(Passenger p) {
-	int day;
-	int month;
-	int year;
-
-	cout << "Please enter the reservation details\n";
-	cout << "Day:";
-	cin >> day;
-	cout << "Month:";
-	cin >> month;
-	cout << "Year:";
-	cin >> year;
-
-	Reservation r1(day, month, year);
-
-	
-}

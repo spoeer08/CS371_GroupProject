@@ -27,7 +27,8 @@ public:
 	string getEmail() const;
 	int getTickets() const;
 	void printPassInfo();
-	void makeReservation(Passenger);
+
+	friend void makeReservation(Passenger p); //Friend function to allow access to private Passenger variables
 };
 
 #endif
