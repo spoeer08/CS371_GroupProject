@@ -1,3 +1,4 @@
+#include "Bus.h"
 #ifndef RESERVATION_H
 #define RESERVATION_H
 
@@ -6,19 +7,18 @@ using namespace std;
 class Reservation {
 
 private:
-	int day;
-	int month;
-	int year;
+	int totalPassengers;
+	//Bus bus;
+	double cost;
 
 public:
-	Reservation(int, int, int);
-	Reservation();
-	void setDay(int);
-	void setMonth(int);
-	void setYear(int);
-	int getDay() const;
-	int getMonth() const;
-	int getYear() const;
+	Reservation(int, Bus, double);
+	void setTotalPassengers(int);
+	void setBus(Bus);
+	void setCost(double);
+	int getTotalPassengers() const;
+	Bus getBus() const;
+	double getCost() const;
 };
 
 #endif
