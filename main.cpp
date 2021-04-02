@@ -2,6 +2,8 @@
 #include <vector>
 #include "Passenger.h"
 #include "Bus.h"
+#include "Driver.h"
+#include "Route.h"
 using namespace std;
 
 
@@ -34,7 +36,10 @@ int tickets;
 int ID;
 string type;
 bool availability;
-int seats;
+int totalSeats;
+int winSeats;
+int aisleSeats;
+string location;
 
 //Vectors
 vector<Passenger> curPassengers;
@@ -42,33 +47,33 @@ vector<Bus> curFleet;
 
 
 //Create all bus objects (3 luxury, 4 small, 4 minivans)
-Bus lux1(1, "luxury", true, 52);
-Bus lux2(2, "luxury", true, 52);
-Bus lux3(3, "luxury", true, 52);
-Bus small1(4, "small", true, 36);
-Bus small2(5, "small", true, 36);
-Bus small3(6, "small", true, 36);
-Bus small4(7, "small", true, 36);
-Bus mini1(8, "mini", true, 12);
-Bus mini2(9, "mini", true, 12);
-Bus mini3(10, "mini", true, 12);
-Bus mini4(11, "mini", true, 12);
+Bus lux1(1, "luxury", true, 52, 21, 21, "Green Bay");
+Bus lux2(2, "luxury", true, 52, 21, 21, "De Pere");
+Bus lux3(3, "luxury", true, 52, 21, 21, "Milwaukee");
+Bus small1(4, "small", true, 36, 24, 12, "Green Bay");
+Bus small2(5, "small", true, 36, 24, 12, "Eau Claire");
+Bus small3(6, "small", true, 36, 24, 12, "Oshkosh");
+Bus small4(7, "small", true, 36, 24, 12, "Whitewater");
+Bus mini1(8, "mini", true, 12, 8, 0, "Milwaukee");
+Bus mini2(9, "mini", true, 12, 8, 0, "Green Bay");
+Bus mini3(10, "mini", true, 12, 8, 0, "Madison");
+Bus mini4(11, "mini", true, 12, 8, 0, "Madison");
 
 //Function blueprints
-void fillVector(vector<Passenger>&);
-void printVector(const vector<Passenger>&);
+void createPassengers(vector<Passenger>&);
+void listPassengers(const vector<Passenger>&);
 void mainMenu();
-void fillRates();
+void changeRates();
 void getRates();
-void fillBus(vector<Bus>&);
-void printBus(const vector<Bus>&);
+void createBus(vector<Bus>&);
+void listBus(const vector<Bus>&);
 void adminMenu();
 void initialMenu();
 
 
 
 int main() {
-	
+
 	initialMenu();
 
 	return 0;
@@ -81,6 +86,7 @@ void initialMenu() {
 	cout << "Please select an option below:\n";
 	cout << "1. Main Menu\n";
 	cout << "2. Admin Menu\n";
+	cout << "3. Exit Program\n";
 	cin >> initialOption;
 
 	switch (initialOption) {
@@ -90,6 +96,8 @@ void initialMenu() {
 	case 2:
 		adminMenu();
 		break;
+	case 3:
+		exit(0);
 	default:
 		exit(1);
 	}
@@ -112,8 +120,8 @@ void mainMenu() {
 
 	switch (mainOption) {
 	case 1:
-		fillVector(curPassengers);
-		printVector(curPassengers);
+		createPassengers(curPassengers);
+		listPassengers(curPassengers);
 		break;
 	case 2:
 		//scheduleMenu();
@@ -137,7 +145,7 @@ void mainMenu() {
 
 
 
-void fillVector(vector<Passenger>& newCurPassengers) { //Dynamically create Passenger objects
+void createPassengers(vector<Passenger>& newCurPassengers) { //Dynamically create Passenger objects
 	cout << "How many passengers? ";
 	int numPassengers;
 	cin >> numPassengers;
@@ -164,7 +172,7 @@ void fillVector(vector<Passenger>& newCurPassengers) { //Dynamically create Pass
 	}
 }
 
-void printVector(const vector<Passenger>& newCurPassengers) { //Print all Passenger objects
+void listPassengers(const vector<Passenger>& newCurPassengers) { //Print all Passenger objects
 	unsigned int size = newCurPassengers.size();
 
 	for (unsigned int i = 0; i < size; i++) {
@@ -177,7 +185,7 @@ void printVector(const vector<Passenger>& newCurPassengers) { //Print all Passen
 	}
 }
 
-void fillRates() { //Creates rates
+void changeRates() { //Creates rates
 
 	cout << "\nSelect which rate to change:" << endl;
 	cout << "1. Luxury Bus Rates" << endl;
@@ -275,8 +283,8 @@ void adminMenu() { //Admin Menu
 	switch (adminOption) {
 
 	case 1:
-		fillBus(curFleet);
-		printBus(curFleet);
+		createBus(curFleet);
+		listBus(curFleet);
 		break;
 
 	case 2:
@@ -288,7 +296,7 @@ void adminMenu() { //Admin Menu
 		break;
 
 	case 4:
-		fillRates();
+		changeRates();
 		break;
 
 	case 5:
@@ -301,7 +309,7 @@ void adminMenu() { //Admin Menu
 	}
 }
 
-	void fillBus(vector<Bus>&newCurFleet) { //Dynamically adds vehicles to fleet
+	void createBus(vector<Bus>&newCurFleet) { //Dynamically adds vehicles to fleet
 		cout << "How many vehicles?";
 		int numVehicles;
 		cin >> numVehicles;
@@ -314,25 +322,44 @@ void adminMenu() { //Admin Menu
 			cin >> type;
 			cout << "Enter availability: (0=No, 1=yes) " << endl;
 			cin >> availability;
-			cout << "Enter seats: " << endl;
-			cin >> seats;
+			cout << "Enter total seats: " << endl;
+			cin >> totalSeats;
+			cout << "Enter window seats: " << endl;
+			cin >> winSeats;
+			cout << "Enter aisle seats: " << endl;
+			cin >> aisleSeats;
+			cout << "Enter location: " << endl;
+			cin >> location;
 
-			Bus newBus(ID, type, availability, seats);
+			Bus newBus(ID, type, availability, totalSeats, winSeats, aisleSeats, location);
 			newCurFleet.push_back(newBus);
 		
 		}
 	}
 
-	void printBus(const vector<Bus>&newCurFleet) { //Dynamically display vehicles in fleet
+	void listBus(const vector<Bus>&newCurFleet) { //Dynamically display vehicles in fleet
 		unsigned int size = newCurFleet.size();
 
 		for (unsigned int i = 0; i < size; i++) {
 			cout << "\nVehicle " << i << " ID: " << newCurFleet[i].getID() << endl;
 			cout << "Vehicle " << i << " type: " << newCurFleet[i].getType() << endl;
 			cout << "Vehicle " << i << " is available?: " << newCurFleet[i].getAvailability() << endl;
-			cout << "Vehicle " << i << " seats: " << newCurFleet[i].getSeats() << endl;
+			cout << "Vehicle " << i << " total seats: " << newCurFleet[i].getTotalSeats() << endl;
+			cout << "Vehicle " << i << " window seats: " << newCurFleet[i].getWinSeats() << endl;
+			cout << "Vehicle " << i << " aisle seats: " << newCurFleet[i].getAisleSeats() << endl;
+			cout << "Vehicle " << i << " location: " << newCurFleet[i].getLocation() << endl;
 			cout << endl;
 		}
 	}
+
+	/*void makeReservation(Passenger p) {
+		cout << "Please enter date of travel: ";
+		cin >> dateChoice << endl;
+		cout << "Please select a bus type: (1=luxury, 2=small, 3=minivan) ";
+		cin >> busChoice << endl;
+		cout << "Please select a route: ";
+		cin >> routeChoice << endl;
+	}
+	*/
 
 
