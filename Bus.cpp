@@ -4,6 +4,14 @@
 using namespace std;
 
 
+Bus::Bus() {
+	setID(01);
+	setType("lux");
+	setAvailability(true);
+	setSeats(52, 21, 21);
+	setLocation("Green Bay");
+}
+
 Bus::Bus(int id, string t, bool a, int ts, int ws, int as, string l) {
 	setID(id);
 	setType(t);

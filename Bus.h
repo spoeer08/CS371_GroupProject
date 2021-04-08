@@ -21,6 +21,7 @@ private:
 
 
 public:
+	Bus();
 	Bus(int, string, bool, int, int, int, string);
 	void setID(int);
 	void setType(string);
