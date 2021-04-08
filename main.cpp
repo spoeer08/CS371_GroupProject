@@ -3,7 +3,7 @@
 #include "Passenger.h"
 #include "Bus.h"
 #include "Driver.h"
-#include "Route.h"
+#include "Reservation.h"
 using namespace std;
 
 
@@ -40,10 +40,12 @@ int totalSeats;
 int winSeats;
 int aisleSeats;
 string location;
+int numPassengers;
 
 //Vectors
 vector<Passenger> curPassengers;
 vector<Bus> curFleet;
+vector<Reservation> curReservations;
 
 
 //Create all bus objects (3 luxury, 4 small, 4 minivans)
@@ -59,6 +61,9 @@ Bus mini2(9, "mini", true, 12, 8, 0, "Green Bay");
 Bus mini3(10, "mini", true, 12, 8, 0, "Madison");
 Bus mini4(11, "mini", true, 12, 8, 0, "Madison");
 
+//Statically add buses to vector NEED TO FINISH
+
+
 //Function blueprints
 void createPassengers(vector<Passenger>&);
 void listPassengers(const vector<Passenger>&);
@@ -69,6 +74,9 @@ void createBus(vector<Bus>&);
 void listBus(const vector<Bus>&);
 void adminMenu();
 void initialMenu();
+void createReservation();
+void listReservations(const vector<Reservation>&);
+
 
 
 
@@ -122,6 +130,7 @@ void mainMenu() {
 	case 1:
 		createPassengers(curPassengers);
 		listPassengers(curPassengers);
+		createReservation();
 		break;
 	case 2:
 		//scheduleMenu();
@@ -147,7 +156,6 @@ void mainMenu() {
 
 void createPassengers(vector<Passenger>& newCurPassengers) { //Dynamically create Passenger objects
 	cout << "How many passengers? ";
-	int numPassengers;
 	cin >> numPassengers;
 
 	for(int i=0; i < numPassengers; i++) {
@@ -278,6 +286,7 @@ void adminMenu() { //Admin Menu
 	cout << "3. Edit reservations" << endl;
 	cout << "4. Change rates" << endl;
 	cout << "5. View income" << endl;
+	cout << "6. Back to Main Menu" << endl;
 	cin >> adminOption;
 
 	switch (adminOption) {
@@ -285,6 +294,8 @@ void adminMenu() { //Admin Menu
 	case 1:
 		createBus(curFleet);
 		listBus(curFleet);
+		//Testing only
+		mainMenu();
 		break;
 
 	case 2:
@@ -302,7 +313,9 @@ void adminMenu() { //Admin Menu
 	case 5:
 		//viewIncome()
 		break;
-
+	case 6:
+		mainMenu();
+		break;
 	default:
 		cout << "Invalid Option!\n";
 		exit(1);
@@ -352,14 +365,142 @@ void adminMenu() { //Admin Menu
 		}
 	}
 
-	/*void makeReservation(Passenger p) {
-		cout << "Please enter date of travel: ";
-		cin >> dateChoice << endl;
-		cout << "Please select a bus type: (1=luxury, 2=small, 3=minivan) ";
-		cin >> busChoice << endl;
-		cout << "Please select a route: ";
-		cin >> routeChoice << endl;
+	void createReservation() {
+		int passOption;
+
+		for (int i = 0; i < numPassengers; i++) {
+			cout << "Please select a passenger:\n";
+			listPassengers(curPassengers);
+			cin >> passOption;
+			makeReservation(curPassengers[passOption - 1]);
+			listReservations(curReservations);
+		}
+
+
 	}
-	*/
+
+	void makeReservation(Passenger p) {
+		cout << "Please select a source: \n";
+		cout << "1. Green Bay\n";
+		cout << "2. Madison\n";
+		cout << "3. Milwaukee\n";
+		cout << "4. Whitewater\n";
+		cout << "5. Oshkosh\n";
+		cout << "6. Eau Claire\n";
+		int sourceOption;
+		cin >> sourceOption;
+
+		string source;
+		switch (sourceOption) {
+		case 1:
+			source = "Green Bay";
+			break;
+		case 2: 
+			source = "Madison";
+			break;
+		case 3:
+			source = "Milwaukee";
+			break;
+		case 4: 
+			source = "Whitewater";
+			break;
+		case 5:
+			source = "Oshkosh";
+			break;
+		case 6:
+			source = "Eau Claire";
+			break;
+		default:
+			cout << "Invalid choice";
+		}
+
+		cout << "Please select a destination:\n";
+		cout << "1. Green Bay\n";
+		cout << "2. Madison\n";
+		cout << "3. Milwaukee\n";
+		cout << "4. Whitewater\n";
+		cout << "5. Oshkosh\n";
+		cout << "6. Eau Claire\n";
+		int destOption;
+		cin >> destOption;
+		while (sourceOption == destOption) {
+			cout << "Source and destination must be different\n";
+			cout << "Please select a destination:\n";
+			cout << "1. Green Bay\n";
+			cout << "2. Madison\n";
+			cout << "3. Milwaukee\n";
+			cout << "4. Whitewater\n";
+			cout << "5. Oshkosh\n";
+			cout << "6. Eau Claire\n";
+			cin >> destOption;
+
+		}
+
+		string destination;
+		switch (destOption) {
+		case 1:
+			destination = "Green Bay";
+			break;
+		case 2:
+			destination = "Madison";
+			break;
+		case 3:
+			destination = "Milwaukee";
+			break;
+		case 4:
+			destination = "Whitewater";
+			break;
+		case 5:
+			destination = "Oshkosh";
+			break;
+		case 6:
+			destination = "Eau Claire";
+			break;
+		default:
+			cout << "Invalid choice";
+		}
+
+		cout << "Select a bus from the list:\n";
+		listBus(curFleet);
+		int busOption;
+		cin >> busOption;
+		Bus b = curFleet[busOption-1];
+
+		cout << "Please enter day of departure:\n";
+		int dayOption;
+		cin >> dayOption;
+
+		cout << "Please enter month of departure:\n";
+		int monthOption;
+		cin >> monthOption;
+
+		cout << "Please enter year of departure:\n";
+		int yearOption;
+		cin >> yearOption;
+
+		cout << "Please enter depart time:\n";
+		int departOption;
+		cin >> departOption;
+
+		Reservation newReservation(numPassengers, source, destination, b, dayOption, monthOption, yearOption, departOption);
+		curReservations.push_back(newReservation);
+
+	}
+
+	void listReservations(const vector<Reservation>& newCurReservation) {
+		unsigned int size = newCurReservation.size();
+
+		for (unsigned int i = 0; i < size; i++) {
+			cout << "Reservation " << i << " :\n";
+			cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
+			cout << "Source: " << newCurReservation[i].getSource() << endl;
+			cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+			cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+			cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+			cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+			cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << endl;
+			cout << endl;
+		}
+	}
 
 
