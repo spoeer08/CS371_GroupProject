@@ -8,17 +8,39 @@ class Reservation {
 
 private:
 	int totalPassengers;
-	//Bus bus;
 	double cost;
+	string source;
+	string destination;
+	double distance;
+	Bus bus;
+	int day;
+	int month;
+	int year;
+	int departTime;
+	int arrivalTime;
 
 public:
-	Reservation(int, Bus, double);
+	Reservation(int, string, string, Bus b, int d, int m, int y, int dt);
 	void setTotalPassengers(int);
-	void setBus(Bus);
 	void setCost(double);
+	void setSource(string);
+	void setDestination(string);
+	void setDistance(double);
+	void setBus(Bus);
+	void setDay(int);
+	void setMonth(int);
+	void setYear(int);
+	void setDepartTime(int);
+	string getSource() const;
+	string getDestination() const;
+	double getDistance() const;
 	int getTotalPassengers() const;
-	Bus getBus() const;
 	double getCost() const;
+	Bus getBus() const;
+	int getDay() const;
+	int getMonth() const;
+	int getYear() const;
+	int getDepartTime() const;
 };
 
 #endif
