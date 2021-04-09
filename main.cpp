@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 #include <vector>
 #include "Passenger.h"
 #include "Bus.h"
@@ -70,7 +71,7 @@ Bus mini4(11, "mini", true, 12, 8, 0, "Madison");
 //Statically add buses to vector NEED TO FINISH
 
 
-//Function blueprints
+//Function prototypes
 void createPassengers(vector<Passenger>&);
 void listPassengers(const vector<Passenger>&);
 void mainMenu();
@@ -91,8 +92,22 @@ void listRenter(const vector<Renter>&);
 
 
 
+
 int main() {
 
+	//Add all of the original buses to the fleet vector
+	curFleet.push_back(lux1);
+	curFleet.push_back(lux2);
+	curFleet.push_back(lux3);
+	curFleet.push_back(small1);
+	curFleet.push_back(small2);
+	curFleet.push_back(small3);
+	curFleet.push_back(small4);
+	curFleet.push_back(mini1);
+	curFleet.push_back(mini2);
+	curFleet.push_back(mini3);
+	curFleet.push_back(mini4);
+	
 	initialMenu();
 
 	return 0;
@@ -305,8 +320,6 @@ void adminMenu() { //Admin Menu
 	case 1:
 		createBus(curFleet);
 		listBus(curFleet);
-		//Testing only
-		mainMenu();
 		break;
 
 	case 2:
@@ -364,14 +377,14 @@ void adminMenu() { //Admin Menu
 	void listBus(const vector<Bus>&newCurFleet) { //Dynamically display vehicles in fleet
 		unsigned int size = newCurFleet.size();
 
-		for (unsigned int i = 0; i < size; i++) {
-			cout << "\nVehicle " << i << " ID: " << newCurFleet[i].getID() << endl;
-			cout << "Vehicle " << i << " type: " << newCurFleet[i].getType() << endl;
-			cout << "Vehicle " << i << " is available?: " << newCurFleet[i].getAvailability() << endl;
-			cout << "Vehicle " << i << " total seats: " << newCurFleet[i].getTotalSeats() << endl;
-			cout << "Vehicle " << i << " window seats: " << newCurFleet[i].getWinSeats() << endl;
-			cout << "Vehicle " << i << " aisle seats: " << newCurFleet[i].getAisleSeats() << endl;
-			cout << "Vehicle " << i << " location: " << newCurFleet[i].getLocation() << endl;
+		for (unsigned int i = 1; i < (size+1); i++) {
+			cout << "\nVehicle " << i << " ID: " << newCurFleet[i-1].getID() << endl;
+			cout << "Vehicle " << i << " type: " << newCurFleet[i-1].getType() << endl;
+			cout << "Vehicle " << i << " is available?: " << newCurFleet[i-1].getAvailability() << endl;
+			cout << "Vehicle " << i << " total seats: " << newCurFleet[i-1].getTotalSeats() << endl;
+			cout << "Vehicle " << i << " window seats: " << newCurFleet[i-1].getWinSeats() << endl;
+			cout << "Vehicle " << i << " aisle seats: " << newCurFleet[i-1].getAisleSeats() << endl;
+			cout << "Vehicle " << i << " location: " << newCurFleet[i-1].getLocation() << endl;
 			cout << endl;
 		}
 	}
