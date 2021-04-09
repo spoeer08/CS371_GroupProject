@@ -18,9 +18,10 @@ private:
 	int year;
 	int departTime;
 	int arrivalTime;
+	string seatType;
 
 public:
-	Reservation(int, string, string, Bus b, int d, int m, int y, int dt);
+	Reservation(int, string, string, Bus b, string s, int d, int m, int y, int dt);
 	void setTotalPassengers(int);
 	void setCost(double);
 	void setSource(string);
@@ -31,6 +32,7 @@ public:
 	void setMonth(int);
 	void setYear(int);
 	void setDepartTime(int);
+	void setSeat(string);
 	string getSource() const;
 	string getDestination() const;
 	double getDistance() const;
@@ -41,6 +43,8 @@ public:
 	int getMonth() const;
 	int getYear() const;
 	int getDepartTime() const;
+	string getSeat() const;
+
 };
 
 #endif

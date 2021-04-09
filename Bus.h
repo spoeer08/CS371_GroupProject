@@ -44,6 +44,7 @@ public:
 	double getRent() const;
 	double getSecurityDeposit() const;
 	void printBusInfo();
+
 };
 
 #endif

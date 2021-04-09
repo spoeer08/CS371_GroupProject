@@ -1,16 +1,18 @@
 #include "Reservation.h"
+#include <iostream>
 
 
 using namespace std;
 
 Bus bus();
 
-Reservation::Reservation(int p, string s, string d, Bus b, int day, int m, int y, int dt)
+Reservation::Reservation(int p, string s, string d, Bus b, string seat, int day, int m, int y, int dt)
 {
 	setTotalPassengers(p);
 	setSource(s);
 	setDestination(d);
 	setBus(b);
+	setSeat(seat);
 	setDay(day);
 	setMonth(m);
 	setYear(y);
@@ -48,9 +50,9 @@ void Reservation::setBus(Bus b) {
 	bus = b;
 }
 
-void Reservation::setDay(int day)
+void Reservation::setDay(int dy)
 {
-	day = day;
+	day = dy;
 }
 
 void Reservation::setMonth(int m)
@@ -65,6 +67,10 @@ void Reservation::setYear(int y) {
 void Reservation::setDepartTime(int dt)
 {
 	departTime = dt;
+}
+
+void Reservation::setSeat(string st) {
+	seatType = st;
 }
 
 string Reservation::getSource() const
@@ -114,4 +120,8 @@ int Reservation::getYear() const
 int Reservation::getDepartTime() const
 {
 	return departTime;
+}
+
+string Reservation::getSeat() const {
+	return seatType;
 }
