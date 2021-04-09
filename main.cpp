@@ -4,6 +4,7 @@
 #include "Bus.h"
 #include "Driver.h"
 #include "Reservation.h"
+#include "Renter.h"
 using namespace std;
 
 
@@ -32,6 +33,10 @@ string address;
 string phone;
 string email;
 string date;
+string rname;
+string raddress;
+string rphone;
+string remail;
 int tickets;
 int ID;
 string type;
@@ -46,6 +51,7 @@ int numPassengers;
 vector<Passenger> curPassengers;
 vector<Bus> curFleet;
 vector<Reservation> curReservations;
+vector<Renter> curRenters;
 
 
 //Create all bus objects (3 luxury, 4 small, 4 minivans)
@@ -76,6 +82,11 @@ void adminMenu();
 void initialMenu();
 void createReservation();
 void listReservations(const vector<Reservation>&);
+void createRenter(vector<Renter>&);
+void listRenter(const vector<Renter>&);
+void hireMenu(const vector<Bus>&); 
+void createRenter(vector<Renter>&); 
+void listRenter(const vector<Renter>&);
 
 
 
@@ -136,7 +147,7 @@ void mainMenu() {
 		//scheduleMenu();
 		break;
 	case 3:
-		//hireMenu();
+		hireMenu(curFleet);
 		break;
 	case 4:
 		getRates();
@@ -499,6 +510,69 @@ void adminMenu() { //Admin Menu
 			cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
 			cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
 			cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << endl;
+			cout << endl;
+		}
+	}
+
+	void hireMenu(const vector<Bus>& newCurFleet) {
+		unsigned int size = newCurFleet.size();
+		cout << "\nBuses for Hire: ";
+
+			for (int i = 0; i < size; i++) {
+				if (newCurFleet[i].getAvailability() == true) {
+					cout << "\nVehicle " << i << " ID: " << newCurFleet[i].getID() << endl;
+					cout << "Vehicle " << i << " type: " << newCurFleet[i].getType() << endl;
+					cout << "Vehicle " << i << " is available?: " << newCurFleet[i].getAvailability() << endl;
+					cout << "Vehicle " << i << " total seats: " << newCurFleet[i].getTotalSeats() << endl;
+					cout << "Vehicle " << i << " window seats: " << newCurFleet[i].getWinSeats() << endl;
+					cout << "Vehicle " << i << " aisle seats: " << newCurFleet[i].getAisleSeats() << endl;
+					cout << "Vehicle " << i << " location: " << newCurFleet[i].getLocation() << endl;
+				}
+				else {
+					cout << "\nVehicle " << i << " ID: " << newCurFleet[i].getID() << " is currently unavailable for hire" << endl;
+				}
+			}
+
+		cout << "\nEnter bus you would like to hire: " << endl;
+		cin >> ID;
+		cout << "Selected Bus: " << endl;
+		cout << "\nVehicle " << ID << " ID: " << newCurFleet[ID - 1].getID() << endl;
+		cout << "Vehicle " << ID << " type: " << newCurFleet[ID - 1].getType() << endl;
+		cout << "Vehicle " << ID << " is available?: " << newCurFleet[ID - 1].getAvailability() << endl;
+		cout << "Vehicle " << ID << " total seats: " << newCurFleet[ID - 1].getTotalSeats() << endl;
+		cout << "Vehicle " << ID << " location: " << newCurFleet[ID - 1].getLocation() << endl;
+		cout << "Enter Renter Information: " << endl;
+		createRenter(curRenters);
+	}
+
+	void createRenter(vector<Renter>& newCurRenters) {
+		cout << "How many renters?: ";
+		int numRenters;
+		cin >> numRenters;
+
+		for (int i = 0; i < numRenters; i++) {
+			cout << "\nName: " << endl;
+			cin >> rname;
+			cout << "Address: (no spaces) " << endl;
+			cin >> raddress;
+			cout << "Phone Number: " << endl;
+			cin >> rphone;
+			cout << "Email: " << endl;
+			cin >> remail;
+
+			Renter newRenter(rname, raddress, rphone, remail);
+			newCurRenters.push_back(newRenter);
+		}
+	}
+
+	void listRenter(const vector<Renter>& newCurRenters) {
+		unsigned int rsize = newCurRenters.size();
+
+		for (unsigned int i = 0; i < rsize; i++) {
+			cout << "\nRenter " << i + 1 << " Name: " << newCurRenters[i].getRName() << endl;
+			cout << "Renter " << i + 1 << " Address: " << newCurRenters[i].getRAddress() << endl;
+			cout << "Renter " << i + 1 << " Phone Number: " << newCurRenters[i].getRPhone() << endl;
+			cout << "Renter " << i + 1 << " Email: " << newCurRenters[i].getREmail() << endl;
 			cout << endl;
 		}
 	}
