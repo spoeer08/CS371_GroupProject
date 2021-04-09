@@ -88,6 +88,7 @@ void listRenter(const vector<Renter>&);
 void hireMenu(const vector<Bus>&); 
 void createRenter(vector<Renter>&); 
 void listRenter(const vector<Renter>&);
+void calcTripCost(Reservation&);
 
 
 
@@ -209,12 +210,12 @@ void createPassengers(vector<Passenger>& newCurPassengers) { //Dynamically creat
 void listPassengers(const vector<Passenger>& newCurPassengers) { //Print all Passenger objects
 	unsigned int size = newCurPassengers.size();
 
-	for (unsigned int i = 0; i < size; i++) {
-		cout << "\nPassenger " << i << " Name: " << newCurPassengers[i].getName() << endl;
-		cout << "Passenger " << i << " Address: " << newCurPassengers[i].getAddress() << endl;
-		cout << "Passenger " << i << " Phone Number: " << newCurPassengers[i].getPhone() << endl;
-		cout << "Passenger " << i << " Email: " << newCurPassengers[i].getEmail() << endl;
-		cout << "Passenger " << i << " Tickets: " << newCurPassengers[i].getTickets() << endl;
+	for (unsigned int i = 1; i < (size+1); i++) {
+		cout << "\nPassenger " << i << " Name: " << newCurPassengers[i-1].getName() << endl;
+		cout << "Passenger " << i << " Address: " << newCurPassengers[i-1].getAddress() << endl;
+		cout << "Passenger " << i << " Phone Number: " << newCurPassengers[i-1].getPhone() << endl;
+		cout << "Passenger " << i << " Email: " << newCurPassengers[i-1].getEmail() << endl;
+		cout << "Passenger " << i << " Tickets: " << newCurPassengers[i-1].getTickets() << endl;
 		cout << endl;
 	}
 }
@@ -490,6 +491,74 @@ void adminMenu() { //Admin Menu
 		cin >> busOption;
 		Bus b = curFleet[busOption-1];
 
+		string seatType; //Holds seatType for reservation object
+		cout << "Select a seat from the list:\n";
+		if (b.getType() == "luxury") {
+			cout << "Luxury Bus seat options:\n";
+			cout << "1. Luxury Aisle: $ " << luxASeat << endl;
+			cout << "2. Luxury Window: $ " << luxWSeat << endl;
+			cout << "3. Luxury Middle: $ " << luxOSeat << endl;
+			int seatOption;
+			cin >> seatOption;
+			while (seatOption < 1 || seatOption > 3) {
+				cout << "Invalid seat selection\n";
+				cout << "Luxury seat option:\n";
+				cout << "1. Luxury Aisle: $ " << luxASeat << endl;
+				cout << "2. Luxury Window: $ " << luxWSeat << endl;
+				cout << "3. Luxury Middle: $ " << luxOSeat << endl;
+				int seatOption;
+				cin >> seatOption;
+			}
+			switch (seatOption) {
+			case 1:
+				seatType = "luxASeat";
+				break;
+			case 2:
+				seatType = "luxWSeat";
+				break;
+			case 3:
+				seatType = "luxOSeat";
+				break;
+			}
+		}
+		else if (b.getType() == "small") {
+			cout << "Small Bus seat options:\n";
+			cout << "1. Small Aisle: $ " << smallASeat << endl;
+			cout << "2. Small Window: $ " << smallWSeat << endl;
+			int seatOption;
+			cin >> seatOption;
+			while (seatOption < 1 || seatOption > 2) {
+				cout << "Invalid seat selection\n";
+				cout << "Small Bus seat options:\n";
+				cout << "1. Small Aisle: $ " << smallASeat << endl;
+				cout << "2. Small Window: $ " << smallWSeat << endl;
+				int seatOption;
+				cin >> seatOption;
+			}
+			switch (seatOption) {
+			case 1:
+				seatType = "smallASeat";
+				break;
+			case 2:
+				seatType = "smallWSeat";
+				break;
+			}
+		}
+		else {
+			cout << "Minivan seat options:\n";
+			cout << "1. Default seat $ " << miniSeat << endl;
+			int seatOption;
+			cin >> seatOption;
+			while (seatOption < 1 || seatOption > 1) {
+				cout << "Invalid seat selection\n";
+				cout << "Minivan seat options:\n";
+				cout << "1. Default seat $ " << miniSeat << endl;
+				int seatOption;
+				cin >> seatOption;
+			}
+			seatType = "miniSeat";
+		}
+
 		cout << "Please enter day of departure:\n";
 		int dayOption;
 		cin >> dayOption;
@@ -506,7 +575,8 @@ void adminMenu() { //Admin Menu
 		int departOption;
 		cin >> departOption;
 
-		Reservation newReservation(numPassengers, source, destination, b, dayOption, monthOption, yearOption, departOption);
+		Reservation newReservation(numPassengers, source, destination, b, seatType, dayOption, monthOption, yearOption, departOption);
+		calcTripCost(newReservation);
 		curReservations.push_back(newReservation);
 
 	}
@@ -515,14 +585,18 @@ void adminMenu() { //Admin Menu
 		unsigned int size = newCurReservation.size();
 
 		for (unsigned int i = 0; i < size; i++) {
-			cout << "Reservation " << i << " :\n";
+			cout << "\nRESERVATION DETAILS:\n";
+			cout << "\nReservation " << (i+1) << ":\n";
 			cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
 			cout << "Source: " << newCurReservation[i].getSource() << endl;
 			cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+			cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+			cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
 			cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
 			cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
 			cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
 			cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << endl;
+			cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
 			cout << endl;
 		}
 	}
@@ -588,6 +662,57 @@ void adminMenu() { //Admin Menu
 			cout << "Renter " << i + 1 << " Email: " << newCurRenters[i].getREmail() << endl;
 			cout << endl;
 		}
+	}
+
+	void calcTripCost(Reservation &r) {
+		double cost;
+		double distance;
+		double tax;
+
+		//Calculate distance depending on source and destination combo
+		if (r.getSource() == "Green Bay" && r.getDestination() == "Madison") {
+			distance = 135.6;
+		}
+		else if (r.getSource() == "Green Bay" && r.getDestination() == "Milwaukee") {
+			distance = 118.7;
+		}
+		else if (r.getSource() == "Green Bay" && r.getDestination() == "Whitewater") {
+			distance = 142.2;
+		}
+		else if (r.getSource() == "Green Bay" && r.getDestination() == "Oshkosh") {
+			distance = 50.4;
+		}
+		else {
+			distance = 194.4;
+		}
+
+		//Calculate cost based on distance and seat type
+		if (r.getSeat() == "luxASeat") {
+			cost = (luxASeat * distance);
+		}
+		else if (r.getSeat() == "luxWSeat") {
+			cost = (luxWSeat * distance);
+		}
+		else if (r.getSeat() == "luxOSeat") {
+			cost = (luxOSeat * distance);
+		}
+		else if (r.getSeat() == "smallASeat") {
+			cost = (smallASeat * distance);
+		}
+		else if (r.getSeat() == "smallWSeat") {
+			cost = (smallWSeat * distance);
+		}
+		else if (r.getSeat() == "miniSeat") {
+			cost = (miniSeat * distance);
+		}
+
+
+		//FINISH CALCULATING TRIP COST WITH TAX
+	/*	tax = (cost * taxRate);
+		cost += tax;
+	*/
+
+		r.setCost(cost);
 	}
 
 
