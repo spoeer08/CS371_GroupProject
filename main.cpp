@@ -1,6 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
+#include <ctime>
 #include "Passenger.h"
 #include "Bus.h"
 #include "Driver.h"
@@ -95,6 +97,13 @@ void calcTripCost(Reservation&);
 
 
 int main() {
+
+	//Testing time objects
+	time_t ttime = time(0);
+	tm *local_time = localtime(&ttime);
+	cout << "Current Time: " << local_time->tm_hour << ":";
+	cout << local_time->tm_min << ":";
+	cout << local_time->tm_sec << endl;
 
 	//Add all of the original buses to the fleet vector
 	curFleet.push_back(lux1);
@@ -635,7 +644,7 @@ void adminMenu() { //Admin Menu
 			cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
 			cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
 			cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
-			cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << endl;
+			cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << " : 00" << endl;
 			cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
 			cout << endl;
 		}
