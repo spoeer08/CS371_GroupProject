@@ -405,6 +405,8 @@ void adminMenu() { //Admin Menu
 	}
 
 	void makeReservation(Passenger p) {
+		bool validDate = false;
+
 		cout << "Please select a source: \n";
 		cout << "1. Green Bay\n";
 		cout << "2. Madison\n";
@@ -559,23 +561,61 @@ void adminMenu() { //Admin Menu
 			seatType = "miniSeat";
 		}
 
-		cout << "Please enter day of departure:\n";
-		int dayOption;
-		cin >> dayOption;
-
-		cout << "Please enter month of departure:\n";
 		int monthOption;
-		cin >> monthOption;
+		do {
+			cout << "Please enter month of departure:\n";
+			cin >> monthOption;
+			if (monthOption > 0 && monthOption < 13) {
+				validDate = true;
+			}
+			else {
+				validDate = false;
+			}
+		} while (validDate == false);
 
-		cout << "Please enter year of departure:\n";
+		int dayOption;
+		do {
+			cout << "Please enter day of departure:\n";
+			cin >> dayOption;
+			if ((monthOption == 1 || monthOption == 3 || monthOption == 5 || monthOption == 7 || monthOption == 8 || monthOption == 10 || monthOption == 12) && (dayOption > 0 && dayOption <= 31)) {
+				validDate = true;
+			}
+			else if ((monthOption == 4 || monthOption == 6 || monthOption == 9 || monthOption == 11) && (dayOption > 0 && dayOption <= 30)) {
+					validDate = true;
+			}
+			else {
+				validDate = false;
+			}
+		} while (validDate == false);
+
 		int yearOption;
-		cin >> yearOption;
+		do {
+			cout << "Please enter year of departure:\n";
+			cin >> yearOption;
+			if (yearOption >= 2021) {
+				validDate = true;
+			}
+			else {
+				validDate = false;
+			}
+		} while (validDate == false);
 
-		cout << "Please enter depart time:\n";
 		int departOption;
-		cin >> departOption;
+		do {
+			cout << "Please enter depart time: (Military format)\n";
+			cout << "Any time past 12pm, add difference to twelve\n";
+			cout << "Example: 8pm is 8 hours past 12pm = (12+8) = 20\n";
+			cin >> departOption;
+			if (departOption > 0 && departOption <= 24) {
+				validDate = true;
+			}
+			else {
+				validDate = false;
+			}
+		} while (validDate == false);
 
-		Reservation newReservation(numPassengers, source, destination, b, seatType, dayOption, monthOption, yearOption, departOption);
+
+		Reservation newReservation(numPassengers, source, destination, b, seatType, monthOption, dayOption, yearOption, departOption);
 		calcTripCost(newReservation);
 		curReservations.push_back(newReservation);
 
@@ -667,7 +707,6 @@ void adminMenu() { //Admin Menu
 	void calcTripCost(Reservation &r) {
 		double cost;
 		double distance;
-		double tax;
 
 		//Calculate distance depending on source and destination combo
 		if (r.getSource() == "Green Bay" && r.getDestination() == "Madison") {
@@ -706,11 +745,8 @@ void adminMenu() { //Admin Menu
 			cost = (miniSeat * distance);
 		}
 
-
-		//FINISH CALCULATING TRIP COST WITH TAX
-	/*	tax = (cost * taxRate);
-		cost += tax;
-	*/
+		//Add sales tax to trip cost
+		cost += (cost * taxRate);
 
 		r.setCost(cost);
 	}

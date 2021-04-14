@@ -6,15 +6,15 @@ using namespace std;
 
 Bus bus();
 
-Reservation::Reservation(int p, string s, string d, Bus b, string seat, int day, int m, int y, int dt)
+Reservation::Reservation(int p, string s, string d, Bus b, string seat, int m, int day, int y, int dt)
 {
 	setTotalPassengers(p);
 	setSource(s);
 	setDestination(d);
 	setBus(b);
 	setSeat(seat);
-	setDay(day);
 	setMonth(m);
+	setDay(day);	
 	setYear(y);
 	setDepartTime(dt);
 
