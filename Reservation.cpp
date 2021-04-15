@@ -1,14 +1,29 @@
 #include "Reservation.h"
+#include "Passenger.h"
 #include <iostream>
 
 
 using namespace std;
 
-Bus bus();
+Passenger p1();
+Bus bus1();
 
-Reservation::Reservation(int p, string s, string d, Bus b, string seat, int m, int day, int y, int dt)
+Reservation::Reservation(string t,string s, string d, Bus b, int m, int day, int y, int dt) { //Reservation parameters for bus hire
+	setResType(t);
+	setSource(s);
+	setDestination(d);
+	setBus(b);
+	setMonth(m);
+	setDay(day);
+	setYear(y);
+	setDepartTime(dt);
+}
+
+Reservation::Reservation(string t, Passenger passenger, int tp, string s, string d, Bus b, string seat, int m, int day, int y, int dt) //Reservation parameters for passengers
 {
-	setTotalPassengers(p);
+	setResType(t);
+	setPassenger(passenger);
+	setTotalPassengers(tp);
 	setSource(s);
 	setDestination(d);
 	setBus(b);
@@ -20,9 +35,18 @@ Reservation::Reservation(int p, string s, string d, Bus b, string seat, int m, i
 
 }
 
-void Reservation::setTotalPassengers(int p)
+void Reservation::setResType(string t) {
+	resType = t;
+}
+
+void Reservation::setPassenger(Passenger p) {
+	Passenger p1();
+	passenger = p;
+}
+
+void Reservation::setTotalPassengers(int tp)
 {
-	totalPassengers = p;
+	totalPassengers = tp;
 }
 
 void Reservation::setCost(double c)
@@ -71,6 +95,14 @@ void Reservation::setDepartTime(int dt)
 
 void Reservation::setSeat(string st) {
 	seatType = st;
+}
+
+string Reservation::getResType()const {
+	return resType;
+}
+
+Passenger Reservation::getPassenger()const {
+	return passenger;
 }
 
 string Reservation::getSource() const
