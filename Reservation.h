@@ -1,5 +1,6 @@
 #include "Bus.h"
 #include "Passenger.h"
+#include "Renter.h"
 #ifndef RESERVATION_H
 #define RESERVATION_H
 
@@ -14,6 +15,7 @@ private:
 	string destination;
 	double distance;
 	Passenger passenger;
+	Renter renter;
 	Bus bus;
 	int day;
 	int month;
@@ -24,10 +26,11 @@ private:
 	string resType;
 
 public:
-	Reservation(string, string, string, Bus, int, int, int, int);
+	Reservation(string, Renter, string, string, Bus, int, int, int, int);
 	Reservation(string, Passenger, int, string, string, Bus, string, int, int, int, int);
 	void setResType(string);
 	void setPassenger(Passenger);
+	void setRenter(Renter);
 	void setTotalPassengers(int);
 	void setCost(double);
 	void setSource(string);
@@ -41,6 +44,7 @@ public:
 	void setSeat(string);
 	string getResType() const;
 	Passenger getPassenger() const;
+	Renter getRenter() const;
 	string getSource() const;
 	string getDestination() const;
 	double getDistance() const;

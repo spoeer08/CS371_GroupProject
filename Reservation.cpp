@@ -1,15 +1,14 @@
 #include "Reservation.h"
 #include "Passenger.h"
+#include "Renter.h"
 #include <iostream>
 
 
 using namespace std;
 
-Passenger p1();
-Bus bus1();
-
-Reservation::Reservation(string t,string s, string d, Bus b, int m, int day, int y, int dt) { //Reservation parameters for bus hire
+Reservation::Reservation(string t, Renter renter, string s, string d, Bus b, int m, int day, int y, int dt) { //Reservation parameters for renters
 	setResType(t);
+	setRenter(renter);
 	setSource(s);
 	setDestination(d);
 	setBus(b);
@@ -40,8 +39,11 @@ void Reservation::setResType(string t) {
 }
 
 void Reservation::setPassenger(Passenger p) {
-	Passenger p1();
 	passenger = p;
+}
+
+void Reservation::setRenter(Renter r) {
+	renter = r;
 }
 
 void Reservation::setTotalPassengers(int tp)
@@ -70,7 +72,6 @@ void Reservation::setDistance(double dist)
 }
 
 void Reservation::setBus(Bus b) {
-	Bus bus1();
 	bus = b;
 }
 
@@ -103,6 +104,10 @@ string Reservation::getResType()const {
 
 Passenger Reservation::getPassenger()const {
 	return passenger;
+}
+
+Renter Reservation::getRenter() const {
+	return renter;
 }
 
 string Reservation::getSource() const
