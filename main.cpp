@@ -91,7 +91,7 @@ void createRenter(vector<Renter>&);
 void listRenter(const vector<Renter>&);
 void calcTripCost(Reservation&);
 void makeHire(Renter);
-
+void changeReservation();
 
 //Testing time objects
 time_t ttime = time(0);
@@ -333,7 +333,7 @@ void adminMenu() { //Admin Menu
 		break;
 
 	case 3:
-		//changeReservation()
+		changeReservation();
 		break;
 
 	case 4:
@@ -942,20 +942,20 @@ void adminMenu() { //Admin Menu
 		}
 		else { //Bus hire reservation cost
 			if (r.getBus().getType() == "luxury") {
-				rent = 1500;
+				rent = luxFullCost;
 				deposit = luxDeposit;
-				mileage = 0.25;
+				mileage = luxMileCost;
 
 			}
 			else if (r.getBus().getType() == "small") {
-				rent = 1300;
+				rent = smallFullCost;
 				deposit = smallDeposit;
-				mileage = 0.20;
+				mileage = smallMileCost;
 			}
 			else {
-				rent = 1000;
+				rent = miniFullCost;
 				deposit = miniDeposit;
-				mileage = 0.15;
+				mileage = miniMileCost;
 			}
 
 			cost += rent;
@@ -964,6 +964,76 @@ void adminMenu() { //Admin Menu
 		}
 
 		r.setCost(cost);
+	}
+
+	void changeReservation() {
+
+		listReservations(curReservations);
+		cout << "Please select a reservation to change\n";
+		int resOption;
+		cin >> resOption;
+
+		cout << "Please select a property to change\n";
+		cout << "1. Change Passenger Name\n";
+		cout << "2. Change Depart Time\n";
+		cout << "3. Change Seat Type\n";
+		cout << "4. Modify Trip Cost\n";
+		cout << "5. Go Back\n";
+		int changeOption;
+		cin >> changeOption;
+		string nameChange;
+		int timeChange;
+		int seatOption;
+		string seatChange;
+
+		switch (changeOption) {
+		case 1:
+			cout << "Passenger Name: " << curReservations[resOption - 1].getPassenger().getName() << endl;
+			cout << "Enter change: ";
+			cin >> nameChange;
+			curReservations[resOption - 1].getPassenger().setName(nameChange);
+			cout << "Edited Name: " << curReservations[resOption - 1].getPassenger().getName() << endl;
+			adminMenu();
+			break;
+		case 2:
+			cout << "Depart Time: " << curReservations[resOption - 1].getDepartTime() << endl;
+			cout << "Enter change: ";
+			cin >> timeChange;
+			curReservations[resOption - 1].setDepartTime(timeChange);
+			cout << "Edited Time: " << curReservations[resOption - 1].getDepartTime() << endl;	
+			break;
+		case 3:
+			cout << "Seat Type: " << curReservations[resOption - 1].getSeat() << endl;
+			if (curReservations[resOption - 1].getBus().getType() == "luxury") { //Finish other 2 types of buses (Mini error that seat cant be changed)
+				cout << "Enter a change option below:\n";
+				cout << "1. Luxury Aisle: $" << luxASeat << endl;
+				cout << "2. Luxury Window: $" << luxWSeat << endl;
+				cout << "3. Luxury Middle: $" << luxOSeat << endl;
+				cin >> seatOption;
+				switch (seatOption) {
+				case 1:
+					seatChange = "luxASeat";
+					break;
+				case 2:
+					seatChange = "luxWSeat";
+					break;
+				case 3:
+					seatChange = "luxOSeat";
+					break;
+				}
+			}
+			curReservations[resOption - 1].setSeat(seatChange);
+			calcTripCost(curReservations[resOption - 1]);
+			cout << "Edited Seat: " << curReservations[resOption - 1].getSeat() << endl;
+			cout << "New Cost: " << curReservations[resOption - 1].getCost() << endl;
+			break;
+		case 4:
+			break;
+		case 5:
+			adminMenu();
+			break;
+			
+		}
 	}
 
 
