@@ -33,9 +33,15 @@ void Bus::setAvailability(bool a) {
 }
 
 void Bus::setSeats(int ts, int ws, int as) {
-	totalSeats = ts;
-	winSeats = ws;
-	aisleSeats = as;
+	//Need to check if number of tickets exceeds seats available - FINISH
+	if (ts <= 0) {
+		cout << "No more seats available\n";
+	}
+	else {
+		totalSeats = ts;
+		winSeats = ws;
+		aisleSeats = as;
+	}
 }
 
 void Bus::setLocation(string l) {
