@@ -71,8 +71,6 @@ Bus mini2(9, "mini", true, 12, 8, 0, "Green Bay");
 Bus mini3(10, "mini", true, 12, 8, 0, "Madison");
 Bus mini4(11, "mini", true, 12, 8, 0, "Madison");
 
-//Statically add buses to vector NEED TO FINISH
-
 
 //Function prototypes
 void createPassengers(vector<Passenger>&);
@@ -88,10 +86,12 @@ void createReservation();
 void listReservations(const vector<Reservation>&);
 void createRenter(vector<Renter>&);
 void listRenter(const vector<Renter>&);
-void hireMenu(const vector<Bus>&); 
+void hireMenu(); 
 void createRenter(vector<Renter>&); 
 void listRenter(const vector<Renter>&);
 void calcTripCost(Reservation&);
+void makeHire(Renter);
+
 
 //Testing time objects
 time_t ttime = time(0);
@@ -137,7 +137,8 @@ void initialMenu() {
 	case 3:
 		exit(0);
 	default:
-		exit(1);
+		cout << "Please select an option between 1 and 3\n";
+		initialMenu();
 	}
 }
 
@@ -150,33 +151,31 @@ void mainMenu() {
 	cout << "FLIXBUS MAIN MENU\n";
 	cout << "Please select an option below:\n";
 	cout << "1. Make a Reservation\n";
-	cout << "2. Schedule a Bus\n";
-	cout << "3. Hire a Bus\n";
-	cout << "4. View Ticket Rates\n";
-	cout << "5. Perform Administrative Tasks\n";
+	cout << "2. Hire a Bus\n";
+	cout << "3. View Ticket Rates\n";
+	cout << "4. Go Back\n";
 	cin >> mainOption;
 
 	switch (mainOption) {
 	case 1:
 		createPassengers(curPassengers);
 		createReservation();
+		mainMenu();
 		break;
 	case 2:
-		//scheduleMenu();
+		createRenter(curRenters);
+		hireMenu();
+		mainMenu();
 		break;
 	case 3:
-		//createRenter(curRenters);
-		//hireMenu(curFleet);
+		getRates();
+		mainMenu();
 		break;
 	case 4:
-		getRates();
-		break;
-	case 5:
-		//adminMenu();
-		break;
+		initialMenu();
 	default:
-		cout << "Invalid Option!\n";
-		exit(1);
+		cout << "Please select an option between 1 and 4\n";
+		mainMenu();
 	}
 
 
@@ -299,7 +298,7 @@ void getRates() { //Gets and prints rates
 	cout << "----- Minivan -----" << endl;
 	cout << "Minivan costs $" << miniFullCost << " with additional $" << miniMileCost << " per mile" << endl;
 	cout << "Minivan security deposit is $" << miniDeposit << endl;
-	cout << "\n** Each ticket and bus hire is subject to " << taxRate << "% tax**" << endl;
+	cout << "\n** Each ticket and bus hire is subject to " << (taxRate * 100) << "% tax**" << endl;
 
 }
 
@@ -317,7 +316,7 @@ void adminMenu() { //Admin Menu
 	cout << "3. Edit reservations" << endl;
 	cout << "4. Change rates" << endl;
 	cout << "5. View income" << endl;
-	cout << "6. Back to Main Menu" << endl;
+	cout << "6. Back to Initial Menu" << endl;
 	cin >> adminOption;
 
 	switch (adminOption) {
@@ -325,10 +324,12 @@ void adminMenu() { //Admin Menu
 	case 1:
 		createBus(curFleet);
 		listBus(curFleet);
+		adminMenu();
 		break;
 
 	case 2:
-		//viewReservation()
+		listReservations(curReservations);
+		adminMenu();
 		break;
 
 	case 3:
@@ -337,17 +338,18 @@ void adminMenu() { //Admin Menu
 
 	case 4:
 		changeRates();
+		adminMenu();
 		break;
 
 	case 5:
 		//viewIncome()
 		break;
 	case 6:
-		mainMenu();
+		initialMenu();
 		break;
 	default:
-		cout << "Invalid Option!\n";
-		exit(1);
+		cout << "Please select an option between 1 and 6\n";
+		adminMenu();
 	}
 }
 
@@ -645,24 +647,39 @@ void adminMenu() { //Admin Menu
 		unsigned int size = newCurReservation.size();
 
 		for (unsigned int i = 0; i < size; i++) {
-			cout << "\nRESERVATION DETAILS:\n";
-			cout << "\nReservation " << (i+1) << ":\n";
-			cout << "\nCustomer: " << newCurReservation[i].getPassenger().getName() << endl;
-			cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
-			cout << "Source: " << newCurReservation[i].getSource() << endl;
-			cout << "Destination: " << newCurReservation[i].getDestination() << endl;
-			cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
-			cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
-			cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
-			cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
-			cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
-			cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
-			cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
-			cout << endl;
+			if (newCurReservation[i].getResType() == "Passenger") {
+				cout << "\nRESERVATION DETAILS:\n";
+				cout << "\nReservation " << (i + 1) << ":\n";
+				cout << "\nCustomer: " << newCurReservation[i].getPassenger().getName() << endl;
+				cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
+				cout << "Source: " << newCurReservation[i].getSource() << endl;
+				cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+				cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+				cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
+				cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+				cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+				cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+				cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+				cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+				cout << endl;
+			}
+			else {
+				cout << "RESERVATION DETAILS:\n";
+				cout << "\nReservation " << (i + 1) << ":\n";
+				cout << "Renter: " << newCurReservation[i].getRenter().getRName() << endl;
+				cout << "Source: " << newCurReservation[i].getSource() << endl;
+				cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+				cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+				cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+				cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+				cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+				cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+				cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+			}
 		}
 	}
 
-/*	void hireMenu(const vector<Bus>& newCurFleet) {
+	void hireMenu() {
 
 		int renterOption;
 
@@ -671,7 +688,7 @@ void adminMenu() { //Admin Menu
 			listRenter(curRenters);
 			cin >> renterOption;
 			makeHire(curRenters[renterOption - 1]);
-			listHires(curHires);
+			//listReservations(curReservations type = hire)
 		}
 	}
 
@@ -683,16 +700,162 @@ void adminMenu() { //Admin Menu
 		cout << "\nEnter ID of bus you would like to hire: " << endl;
 		cin >> ID;
 		cout << "Selected Bus: " << endl;
-		cout << "\nVehicle ID: " << newCurFleet[ID - 1].getID() << endl;
-		cout << "Vehicle Type: " << newCurFleet[ID - 1].getType() << endl;
-		cout << "Total Seats: " << newCurFleet[ID - 1].getTotalSeats() << endl;
-		cout << "Window Seats: " << newCurFleet[ID - 1].getWinSeats() << endl;
-		cout << "Aisle Seats: " << newCurFleet[ID - 1].getAisleSeats() << endl;
-		cout << "Depot Location: " << newCurFleet[ID - 1].getLocation() << endl;
-		Bus b = newCurFleet[ID - 1];
+		cout << "\nVehicle ID: " << curFleet[ID - 1].getID() << endl;
+		cout << "Vehicle Type: " << curFleet[ID - 1].getType() << endl;
+		cout << "Total Seats: " << curFleet[ID - 1].getTotalSeats() << endl;
+		cout << "Window Seats: " << curFleet[ID - 1].getWinSeats() << endl;
+		cout << "Aisle Seats: " << curFleet[ID - 1].getAisleSeats() << endl;
+		cout << "Depot Location: " << curFleet[ID - 1].getLocation() << endl;
+		Bus b = curFleet[ID - 1];
 		b.setAvailability(false); //Change availability of selected bus	
 
 		//Ask for Reservation info
+		bool validDate = false;
+
+		//Date of travel
+		int monthOption;
+		do {
+			cout << "Please enter month of hire:\n";
+			cin >> monthOption;
+			if (monthOption > 0 && monthOption < 13) {
+				validDate = true;
+			}
+			else {
+				cout << "MONTH OF HIRE MUST BE 1-12\n";
+				validDate = false;
+			}
+		} while (validDate == false);
+
+		int dayOption;
+		do {
+			cout << "Please enter day of hire:\n";
+			cin >> dayOption;
+			if ((monthOption == 1 || monthOption == 3 || monthOption == 5 || monthOption == 7 || monthOption == 8 || monthOption == 10 || monthOption == 12) && (dayOption > 0 && dayOption <= 31)) {
+				validDate = true;
+			}
+			else if ((monthOption == 4 || monthOption == 6 || monthOption == 9 || monthOption == 11) && (dayOption > 0 && dayOption <= 30)) {
+				validDate = true;
+			}
+			else {
+				cout << "INVALID DAY SELECTED\n";
+				validDate = false;
+			}
+		} while (validDate == false);
+
+		int yearOption;
+		do {
+			cout << "Please enter year of hire:\n";
+			cin >> yearOption;
+			if (yearOption >= 2021) {
+				validDate = true;
+			}
+			else {
+				cout << "YEAR MUST BE 2021 OR GREATER\n";
+				validDate = false;
+			}
+		} while (validDate == false);
+
+		int departOption;
+		do {
+			cout << "Please enter hire time: (Military format)\n";
+			cout << "Any time past 12pm, add difference to twelve\n";
+			cout << "Example: 8pm is 8 hours past 12pm = (12+8) = 20\n";
+			cin >> departOption;
+			if (departOption > 0 && departOption <= 24) {
+				validDate = true;
+			}
+			else {
+				cout << "HIRE TIME MUST BE 1-24\n";
+				validDate = false;
+			}
+		} while (validDate == false);
+
+		//Source
+		cout << "Please select a source: \n";
+		cout << "1. Green Bay\n";
+		cout << "2. Madison\n";
+		cout << "3. Milwaukee\n";
+		cout << "4. Whitewater\n";
+		cout << "5. Oshkosh\n";
+		cout << "6. Eau Claire\n";
+		int sourceOption;
+		cin >> sourceOption;
+
+		string source;
+		switch (sourceOption) {
+		case 1:
+			source = "Green Bay";
+			break;
+		case 2:
+			source = "Madison";
+			break;
+		case 3:
+			source = "Milwaukee";
+			break;
+		case 4:
+			source = "Whitewater";
+			break;
+		case 5:
+			source = "Oshkosh";
+			break;
+		case 6:
+			source = "Eau Claire";
+			break;
+		default:
+			cout << "Invalid choice";
+		}
+
+		//Destination
+		cout << "Please select a destination:\n";
+		cout << "1. Green Bay\n";
+		cout << "2. Madison\n";
+		cout << "3. Milwaukee\n";
+		cout << "4. Whitewater\n";
+		cout << "5. Oshkosh\n";
+		cout << "6. Eau Claire\n";
+		int destOption;
+		cin >> destOption;
+		while (sourceOption == destOption) {
+			cout << "Source and destination must be different\n";
+			cout << "Please select a destination:\n";
+			cout << "1. Green Bay\n";
+			cout << "2. Madison\n";
+			cout << "3. Milwaukee\n";
+			cout << "4. Whitewater\n";
+			cout << "5. Oshkosh\n";
+			cout << "6. Eau Claire\n";
+			cin >> destOption;
+
+		}
+
+		string destination;
+		switch (destOption) {
+		case 1:
+			destination = "Green Bay";
+			break;
+		case 2:
+			destination = "Madison";
+			break;
+		case 3:
+			destination = "Milwaukee";
+			break;
+		case 4:
+			destination = "Whitewater";
+			break;
+		case 5:
+			destination = "Oshkosh";
+			break;
+		case 6:
+			destination = "Eau Claire";
+			break;
+		default:
+			cout << "Invalid choice";
+		}
+
+		Reservation newHire("Hire", r, source, destination, b, monthOption, dayOption, yearOption, departOption);
+		calcTripCost(newHire);
+		curReservations.push_back(newHire);
+		listReservations(curReservations);
 	}
 
 	void createRenter(vector<Renter>& newCurRenters) {
@@ -726,11 +889,13 @@ void adminMenu() { //Admin Menu
 			cout << endl;
 		}
 	}
-	*/
 
 	void calcTripCost(Reservation &r) {
-		double cost;
+		double cost = 0.0;
 		double distance;
+		double deposit;
+		double mileage;
+		double rent;
 
 		//Calculate distance depending on source and destination combo
 		if (r.getSource() == "Green Bay" && r.getDestination() == "Madison") {
@@ -749,29 +914,54 @@ void adminMenu() { //Admin Menu
 			distance = 194.4;
 		}
 
-		//Calculate cost based on distance and seat type
-		if (r.getSeat() == "luxASeat") {
-			cost = (luxASeat * distance);
-		}
-		else if (r.getSeat() == "luxWSeat") {
-			cost = (luxWSeat * distance);
-		}
-		else if (r.getSeat() == "luxOSeat") {
-			cost = (luxOSeat * distance);
-		}
-		else if (r.getSeat() == "smallASeat") {
-			cost = (smallASeat * distance);
-		}
-		else if (r.getSeat() == "smallWSeat") {
-			cost = (smallWSeat * distance);
-		}
-		else if (r.getSeat() == "miniSeat") {
-			cost = (miniSeat * distance);
-		}
+		if (r.getResType() == "Passenger") { //Passenger reservation cost
 
-		//Add sales tax to trip cost
-		cost *= r.getTotalPassengers();
-		cost += (cost * taxRate);
+			//Calculate cost based on distance and seat type
+			if (r.getSeat() == "luxASeat") {
+				cost = (luxASeat * distance);
+			}
+			else if (r.getSeat() == "luxWSeat") {
+				cost = (luxWSeat * distance);
+			}
+			else if (r.getSeat() == "luxOSeat") {
+				cost = (luxOSeat * distance);
+			}
+			else if (r.getSeat() == "smallASeat") {
+				cost = (smallASeat * distance);
+			}
+			else if (r.getSeat() == "smallWSeat") {
+				cost = (smallWSeat * distance);
+			}
+			else if (r.getSeat() == "miniSeat") {
+				cost = (miniSeat * distance);
+			}
+
+			//Add sales tax to trip cost
+			cost *= r.getTotalPassengers();
+			cost += (cost * taxRate);	
+		}
+		else { //Bus hire reservation cost
+			if (r.getBus().getType() == "luxury") {
+				rent = 1500;
+				deposit = luxDeposit;
+				mileage = 0.25;
+
+			}
+			else if (r.getBus().getType() == "small") {
+				rent = 1300;
+				deposit = smallDeposit;
+				mileage = 0.20;
+			}
+			else {
+				rent = 1000;
+				deposit = miniDeposit;
+				mileage = 0.15;
+			}
+
+			cost += rent;
+			cost += deposit;
+			cost += (distance * mileage);
+		}
 
 		r.setCost(cost);
 	}
