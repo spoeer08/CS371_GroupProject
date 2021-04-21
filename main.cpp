@@ -8,6 +8,7 @@
 #include "Driver.h"
 #include "Reservation.h"
 #include "Renter.h"
+#include <fstream>
 using namespace std;
 
 
@@ -52,6 +53,7 @@ string location;
 int intLocation;
 int numPassengers;
 int numRenters;
+
 
 //Vectors
 vector<Passenger> curPassengers;
@@ -563,13 +565,12 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			cout << "\nPlease select a passenger to make a reservation:\n";
 			listPassengers(curPassengers);
 			cin >> passOption;
-			while ((passOption < curPassengers.size()) || (passOption > curPassengers.size())) {
+			while ((passOption <= 0) || (passOption > curPassengers.size())) {
 				cout << "Passenger " << passOption << " does not exist\n";
 				cout << "\nPlease select a passenger to make a reservation:\n";
 				cin >> passOption;
 			}
 			makeReservation(curPassengers[passOption - 1]);
-			listReservations(curReservations);
 		}
 
 
@@ -812,42 +813,64 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		calcTripCost(newReservation);
 		curReservations.push_back(newReservation);
 
+
 	}
 
 	void listReservations(const vector<Reservation>& newCurReservation) {
 		 int size = newCurReservation.size();
 
+		 //Testing file creation and writing
+		 ofstream fileReservationOut;
+		 fileReservationOut.open("Reservations.txt");
+
 		for ( int i = 0; i < size; i++) {
+			
 			if (newCurReservation[i].getResType() == "Passenger") {
-				cout << "\nRESERVATION DETAILS:\n";
-				cout << "\nReservation " << (i + 1) << ":\n";
-				cout << "\nCustomer: " << newCurReservation[i].getPassenger().getName() << endl;
-				cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
-				cout << "Source: " << newCurReservation[i].getSource() << endl;
-				cout << "Destination: " << newCurReservation[i].getDestination() << endl;
-				cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
-				cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
-				cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
-				cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
-				cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
-				cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
-				cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
-				cout << endl;
+				fileReservationOut << "Reservation " << (i + 1) << ":\n";
+				fileReservationOut << "Customer: " << newCurReservation[i].getPassenger().getName() << endl;
+				fileReservationOut << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
+				fileReservationOut << "Source: " << newCurReservation[i].getSource() << endl;
+				fileReservationOut << "Destination: " << newCurReservation[i].getDestination() << endl;
+				fileReservationOut << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+				fileReservationOut << "Seat Type: " << newCurReservation[i].getSeat() << endl;
+				fileReservationOut << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+				fileReservationOut << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+				fileReservationOut << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+				fileReservationOut << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+				fileReservationOut << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+				fileReservationOut << endl;
+				
 			}
 			else {
-				cout << "RESERVATION DETAILS:\n";
-				cout << "\nReservation " << (i + 1) << ":\n";
-				cout << "Renter: " << newCurReservation[i].getRenter().getRName() << endl;
-				cout << "Source: " << newCurReservation[i].getSource() << endl;
-				cout << "Destination: " << newCurReservation[i].getDestination() << endl;
-				cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
-				cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
-				cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
-				cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
-				cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
-				cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+				fileReservationOut << "Reservation " << (i + 1) << ":\n";
+				fileReservationOut << "Renter: " << newCurReservation[i].getRenter().getRName() << endl;
+				fileReservationOut << "Source: " << newCurReservation[i].getSource() << endl;
+				fileReservationOut << "Destination: " << newCurReservation[i].getDestination() << endl;
+				fileReservationOut << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+				fileReservationOut << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+				fileReservationOut << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+				fileReservationOut << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+				fileReservationOut << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+				fileReservationOut << "Total Cost: $" << newCurReservation[i].getCost() << endl;
 			}
 		}
+
+
+		//Open the Reservations.txt file
+		ifstream fileReservationIn;
+		string line;
+		fileReservationIn.open("Reservations.txt");
+		if (fileReservationIn.is_open()) {
+			while (getline(fileReservationIn, line, '\t')) {
+				fileReservationIn >> line;
+				cout << line << endl;
+			}
+			fileReservationOut.close(); // Close the file
+		}
+		else {
+			cout << "Unable to open file";
+		}
+
 	}
 
 	void hireMenu() {
