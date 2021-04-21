@@ -96,6 +96,7 @@ void listRenter(const vector<Renter>&);
 void calcTripCost(Reservation&);
 void makeHire(Renter);
 void changeReservation();
+void viewIncome(const vector<Reservation>&);
 
 //Testing time objects
 time_t ttime = time(0);
@@ -425,7 +426,7 @@ case 4:
 	break;
 
 case 5:
-	//viewIncome()
+	viewIncome(curReservations);
 	break;
 case 6:
 	initialMenu();
@@ -602,6 +603,9 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			cout << "Please enter day of departure:\n";
 			cin >> dayOption;
 			if ((monthOption == 1 || monthOption == 3 || monthOption == 5 || monthOption == 7 || monthOption == 8 || monthOption == 10 || monthOption == 12) && (dayOption > 0 && dayOption <= 31)) {
+				validDate = true;
+			}
+			else if ((monthOption == 2) && dayOption <= 28) {
 				validDate = true;
 			}
 			else if ((monthOption == 4 || monthOption == 6 || monthOption == 9 || monthOption == 11) && (dayOption > 0 && dayOption <= 30)) {
@@ -935,6 +939,9 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			cout << "Please enter day of hire:\n";
 			cin >> dayOption;
 			if ((monthOption == 1 || monthOption == 3 || monthOption == 5 || monthOption == 7 || monthOption == 8 || monthOption == 10 || monthOption == 12) && (dayOption > 0 && dayOption <= 31)) {
+				validDate = true;
+			}
+			else if ((monthOption == 2) && dayOption <= 28) {
 				validDate = true;
 			}
 			else if ((monthOption == 4 || monthOption == 6 || monthOption == 9 || monthOption == 11) && (dayOption > 0 && dayOption <= 30)) {
@@ -1279,4 +1286,125 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		}
 	}
 
+	void viewIncome(const vector<Reservation>& newCurReservation) {
+		bool validDate = false;
+		int typeChoice;
+		int size = newCurReservation.size();
+
+		cout << "\nView Income by:\n";
+		cout << "1. Date\n";
+		cout << "2. Vehicle\n";
+		cin >> typeChoice;
+		while ((typeChoice < 1) || (typeChoice > 2)) {
+			cout << "Please enter either 1 or 2\n";
+			cout << "1. Date\n";
+			cout << "2. Vehicle\n";
+			cin >> typeChoice;
+		}
+
+		switch (typeChoice) {
+		case 1:
+			int monthOption;
+			do {
+				cout << "Please enter month:\n";
+				cin >> monthOption;
+				if (monthOption > 0 && monthOption < 13) {
+					validDate = true;
+				}
+				else {
+					cout << "MONTH MUST BE 1-12\n";
+					validDate = false;
+				}
+			} while (validDate == false);
+
+			int dayOption;
+			do {
+				cout << "Please enter day:\n";
+				cin >> dayOption;
+				if ((monthOption == 1 || monthOption == 3 || monthOption == 5 || monthOption == 7 || monthOption == 8 || monthOption == 10 || monthOption == 12) && (dayOption > 0 && dayOption <= 31)) {
+					validDate = true;
+				}
+				else if ((monthOption == 2) && dayOption <= 28) {
+					validDate = true;
+				}
+				else if ((monthOption == 4 || monthOption == 6 || monthOption == 9 || monthOption == 11) && (dayOption > 0 && dayOption <= 30)) {
+					validDate = true;
+				}
+				else {
+					cout << "INVALID DAY SELECTED\n";
+					validDate = false;
+				}
+			} while (validDate == false);
+
+			int yearOption;
+			do {
+				cout << "Please enter year:\n";
+				cin >> yearOption;
+				if (yearOption >= 2021) {
+					validDate = true;
+				}
+				else {
+					cout << "YEAR MUST BE 2021 OR GREATER\n";
+					validDate = false;
+				}
+			} while (validDate == false);
+
+			for (int i = 0; i < size; i++) {
+			
+				if (newCurReservation[i].getMonth() == monthOption && newCurReservation[i].getDay() == dayOption && newCurReservation[i].getYear() == yearOption) {
+					cout << "\nReservation: " << (i + 1) << endl;
+					cout << "Income: " << newCurReservation[i].getCost() << endl;
+				}
+				else {
+					cout << "\nReservation " << (i + 1) << " did not match criteria\n";
+				}
+			}
+			break;
+			
+		case 2:
+			int vehicleOption;
+			string vehicle;
+
+			cout << "Please select a vehicle type:\n";
+			cout << "1. Luxury\n";
+			cout << "2. Small\n";
+			cout << "3. Minivan\n";
+			cin >> vehicleOption;
+			while (vehicleOption < 1 || vehicleOption > 3) {
+				cout << "Please enter a number between 1 and 3\n";
+				cout << "Please select a vehicle type:\n";
+				cout << "1. Luxury\n";
+				cout << "2. Small\n";
+				cout << "3. Minivan\n";
+				cin >> vehicleOption;
+			}
+			switch (vehicleOption) {
+			case 1:
+				vehicle = "luxury";
+				break;
+			case 2:
+				vehicle = "small";
+				break;
+			case 3:
+				vehicle = "mini";
+				break;
+			}
+
+			for (int i = 0; i < size; i++) {
+
+				if (newCurReservation[i].getBus().getType() == vehicle) {
+					cout << "\nReservation: " << (i + 1) << endl;
+					cout << "Income: " << newCurReservation[i].getCost() << endl;
+				}
+				else {
+					cout << "\nReservation " << (i + 1) << " did not match criteria\n";
+				}
+			}
+
+			break;
+
+		}
+
+		viewIncome(curReservations);
+	}
 
