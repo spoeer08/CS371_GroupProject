@@ -97,6 +97,8 @@ void calcTripCost(Reservation&);
 void makeHire(Renter);
 void changeReservation();
 void viewIncome(const vector<Reservation>&);
+void viewReservation(const vector<Reservation>&);
+bool checkDate(int, int, int);
 
 //Testing time objects
 time_t ttime = time(0);
@@ -399,7 +401,7 @@ cout << "1. Add vehicle to fleet" << endl;
 cout << "2. View reservations" << endl;
 cout << "3. Edit reservations" << endl;
 cout << "4. Change rates" << endl;
-cout << "5. View income" << endl;
+cout << "5. View Income" << endl;
 cout << "6. Back to Initial Menu" << endl;
 cin >> adminOption;
 
@@ -412,7 +414,7 @@ case 1:
 	break;
 
 case 2:
-	listReservations(curReservations);
+	viewReservation(curReservations);
 	adminMenu();
 	break;
 
@@ -424,13 +426,15 @@ case 4:
 	changeRates();
 	adminMenu();
 	break;
-
+	
 case 5:
 	viewIncome(curReservations);
-	break;
+	
+
 case 6:
 	initialMenu();
 	break;
+
 default:
 	cout << "Please select an option between 1 and 6\n";
 	adminMenu();
@@ -630,193 +634,201 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			}
 		} while (validDate == false);
 
-		int departOption;
-		do {
-			cout << "Please enter depart time: (Military format)\n";
-			cout << "Any time past 12pm, add difference to twelve\n";
-			cout << "Example: 8pm is 8 hours past 12pm = (12+8) = 20\n";
-			cin >> departOption;
-			if (departOption > 0 && departOption <= 24) {
-				validDate = true;
-			}
-			else {
-				cout << "DEPART TIME MUST BE 1-24\n";
-				validDate = false;
-			}
-		} while (validDate == false);
+		if (checkDate(yearOption, monthOption, dayOption) == true) {
+			int departOption;
+			do {
+				cout << "Please enter depart time: (Military format)\n";
+				cout << "Any time past 12pm, add difference to twelve\n";
+				cout << "Example: 8pm is 8 hours past 12pm = (12+8) = 20\n";
+				cin >> departOption;
+				if (departOption > 0 && departOption <= 24) {
+					validDate = true;
+				}
+				else {
+					cout << "DEPART TIME MUST BE 1-24\n";
+					validDate = false;
+				}
+			} while (validDate == false);
 
-		//Source
-		cout << "Please select a source: \n";
-		cout << "1. Green Bay\n";
-		cout << "2. Madison\n";
-		cout << "3. Milwaukee\n";
-		cout << "4. Whitewater\n";
-		cout << "5. Oshkosh\n";
-		cout << "6. Eau Claire\n";
-		int sourceOption;
-		cin >> sourceOption;
-		while ((sourceOption <= 0) || (sourceOption > 6)) {
-			cout << "Please select an option between 1 and 6\n";
-			cout << "Please select a source from the list above: ";
+
+
+			//Source
+			cout << "Please select a source: \n";
+			cout << "1. Green Bay\n";
+			cout << "2. Madison\n";
+			cout << "3. Milwaukee\n";
+			cout << "4. Whitewater\n";
+			cout << "5. Oshkosh\n";
+			cout << "6. Eau Claire\n";
+			int sourceOption;
 			cin >> sourceOption;
-		}
+			while ((sourceOption <= 0) || (sourceOption > 6)) {
+				cout << "Please select an option between 1 and 6\n";
+				cout << "Please select a source from the list above: ";
+				cin >> sourceOption;
+			}
 
-		string source;
-		switch (sourceOption) {
-		case 1:
-			source = "Green Bay";
-			break;
-		case 2: 
-			source = "Madison";
-			break;
-		case 3:
-			source = "Milwaukee";
-			break;
-		case 4: 
-			source = "Whitewater";
-			break;
-		case 5:
-			source = "Oshkosh";
-			break;
-		case 6:
-			source = "Eau Claire";
-			break;
-		}
+			string source;
+			switch (sourceOption) {
+			case 1:
+				source = "Green Bay";
+				break;
+			case 2:
+				source = "Madison";
+				break;
+			case 3:
+				source = "Milwaukee";
+				break;
+			case 4:
+				source = "Whitewater";
+				break;
+			case 5:
+				source = "Oshkosh";
+				break;
+			case 6:
+				source = "Eau Claire";
+				break;
+			}
 
-		//Destination
-		cout << "Please select a destination:\n";
-		cout << "1. Green Bay\n";
-		cout << "2. Madison\n";
-		cout << "3. Milwaukee\n";
-		cout << "4. Whitewater\n";
-		cout << "5. Oshkosh\n";
-		cout << "6. Eau Claire\n";
-		int destOption;
-		cin >> destOption;
-		while ((destOption <= 0) || (destOption > 6)) {
-			cout << "Please select an option between 1 and 6\n";
-			cout << "Please select a destination from the list above: ";
+			//Destination
+			cout << "Please select a destination:\n";
+			cout << "1. Green Bay\n";
+			cout << "2. Madison\n";
+			cout << "3. Milwaukee\n";
+			cout << "4. Whitewater\n";
+			cout << "5. Oshkosh\n";
+			cout << "6. Eau Claire\n";
+			int destOption;
 			cin >> destOption;
-		}
-		while (sourceOption == destOption) {
-			cout << "Source and destination must be different\n";
-			cout << "Please select a destination from the list above: ";
-			cin >> destOption;
-		}
+			while ((destOption <= 0) || (destOption > 6)) {
+				cout << "Please select an option between 1 and 6\n";
+				cout << "Please select a destination from the list above: ";
+				cin >> destOption;
+			}
+			while (sourceOption == destOption) {
+				cout << "Source and destination must be different\n";
+				cout << "Please select a destination from the list above: ";
+				cin >> destOption;
+			}
 
-		string destination;
-		switch (destOption) {
-		case 1:
-			destination = "Green Bay";
-			break;
-		case 2:
-			destination = "Madison";
-			break;
-		case 3:
-			destination = "Milwaukee";
-			break;
-		case 4:
-			destination = "Whitewater";
-			break;
-		case 5:
-			destination = "Oshkosh";
-			break;
-		case 6:
-			destination = "Eau Claire";
-			break;
-		default:
-			cout << "Invalid choice";
-		}
+			string destination;
+			switch (destOption) {
+			case 1:
+				destination = "Green Bay";
+				break;
+			case 2:
+				destination = "Madison";
+				break;
+			case 3:
+				destination = "Milwaukee";
+				break;
+			case 4:
+				destination = "Whitewater";
+				break;
+			case 5:
+				destination = "Oshkosh";
+				break;
+			case 6:
+				destination = "Eau Claire";
+				break;
+			default:
+				cout << "Invalid choice";
+			}
 
-		//Bus Selection
-		listBus(curFleet);
-		cout << "Select a bus from the list above:\n";
-		int busOption;
-		cin >> busOption;
-		while ((busOption < 1) || (busOption > curFleet.size())) {
-			cout << "Bus " << busOption << " does not exist\n";
+			//Bus Selection
+			listBus(curFleet);
 			cout << "Select a bus from the list above:\n";
+			int busOption;
 			cin >> busOption;
-		}
+			while ((busOption < 1) || (busOption > curFleet.size())) {
+				cout << "Bus " << busOption << " does not exist\n";
+				cout << "Select a bus from the list above:\n";
+				cin >> busOption;
+			}
 
-		string seatType; //Holds seatType for reservation object
-		cout << "Select a seat from the list:\n";
-		if (curFleet[busOption - 1].getType() == "luxury") {
-			cout << "Luxury Bus seat options:\n";
-			cout << "1. Luxury Aisle: $" << luxASeat << endl;
-			cout << "2. Luxury Window: $" << luxWSeat << endl;
-			cout << "3. Luxury Middle: $" << luxOSeat << endl;
-			int seatOption;
-			cin >> seatOption;
-			while (seatOption < 1 || seatOption > 3) {
-				cout << "Invalid seat selection\n";
-				cout << "Luxury seat option:\n";
+			string seatType; //Holds seatType for reservation object
+			cout << "Select a seat from the list:\n";
+			if (curFleet[busOption - 1].getType() == "luxury") {
+				cout << "Luxury Bus seat options:\n";
 				cout << "1. Luxury Aisle: $" << luxASeat << endl;
 				cout << "2. Luxury Window: $" << luxWSeat << endl;
 				cout << "3. Luxury Middle: $" << luxOSeat << endl;
+				int seatOption;
 				cin >> seatOption;
+				while (seatOption < 1 || seatOption > 3) {
+					cout << "Invalid seat selection\n";
+					cout << "Luxury seat option:\n";
+					cout << "1. Luxury Aisle: $" << luxASeat << endl;
+					cout << "2. Luxury Window: $" << luxWSeat << endl;
+					cout << "3. Luxury Middle: $" << luxOSeat << endl;
+					cin >> seatOption;
+				}
+				switch (seatOption) {
+				case 1:
+					seatType = "luxASeat";
+					curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), curFleet[busOption - 1].getWinSeats(), (curFleet[busOption - 1].getAisleSeats() - tickets));
+					break;
+				case 2:
+					seatType = "luxWSeat";
+					curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), (curFleet[busOption - 1].getWinSeats() - tickets), curFleet[busOption - 1].getAisleSeats());
+					break;
+				case 3:
+					seatType = "luxOSeat";
+					curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), curFleet[busOption - 1].getWinSeats(), curFleet[busOption - 1].getAisleSeats());
+					break;
+				}
 			}
-			switch (seatOption) {
-			case 1:
-				seatType = "luxASeat";
-				curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats()- tickets), curFleet[busOption - 1].getWinSeats(), (curFleet[busOption - 1].getAisleSeats() - tickets));
-				break;
-			case 2:
-				seatType = "luxWSeat";
-				curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), (curFleet[busOption - 1].getWinSeats() - tickets), curFleet[busOption - 1].getAisleSeats());
-				break;
-			case 3:
-				seatType = "luxOSeat";
-				curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), curFleet[busOption - 1].getWinSeats(), curFleet[busOption - 1].getAisleSeats());
-				break;
-			}
-		}
-		else if (curFleet[busOption - 1].getType() == "small") {
-			cout << "Small Bus seat options:\n";
-			cout << "1. Small Aisle: $" << smallASeat << endl;
-			cout << "2. Small Window: $" << smallWSeat << endl;
-			int seatOption;
-			cin >> seatOption;
-			while (seatOption < 1 || seatOption > 2) {
-				cout << "Invalid seat selection\n";
+			else if (curFleet[busOption - 1].getType() == "small") {
 				cout << "Small Bus seat options:\n";
 				cout << "1. Small Aisle: $" << smallASeat << endl;
 				cout << "2. Small Window: $" << smallWSeat << endl;
 				int seatOption;
 				cin >> seatOption;
+				while (seatOption < 1 || seatOption > 2) {
+					cout << "Invalid seat selection\n";
+					cout << "Small Bus seat options:\n";
+					cout << "1. Small Aisle: $" << smallASeat << endl;
+					cout << "2. Small Window: $" << smallWSeat << endl;
+					int seatOption;
+					cin >> seatOption;
+				}
+				switch (seatOption) {
+				case 1:
+					seatType = "smallASeat";
+					curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), curFleet[busOption - 1].getWinSeats(), (curFleet[busOption - 1].getAisleSeats() - tickets));
+					break;
+				case 2:
+					seatType = "smallWSeat";
+					curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), (curFleet[busOption - 1].getWinSeats() - tickets), curFleet[busOption - 1].getAisleSeats());
+					break;
+				}
 			}
-			switch (seatOption) {
-			case 1:
-				seatType = "smallASeat";
-				curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), curFleet[busOption - 1].getWinSeats(), (curFleet[busOption - 1].getAisleSeats() - tickets));
-				break;
-			case 2:
-				seatType = "smallWSeat";
-				curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), (curFleet[busOption - 1].getWinSeats() - tickets), curFleet[busOption - 1].getAisleSeats());
-				break;
-			}
-		}
-		else {
-			cout << "Minivan seat options:\n";
-			cout << "1. Default seat $" << miniSeat << endl;
-			int seatOption;
-			cin >> seatOption;
-			while (seatOption < 1 || seatOption > 1) {
-				cout << "Invalid seat selection\n";
+			else {
 				cout << "Minivan seat options:\n";
 				cout << "1. Default seat $" << miniSeat << endl;
 				int seatOption;
 				cin >> seatOption;
+				while (seatOption < 1 || seatOption > 1) {
+					cout << "Invalid seat selection\n";
+					cout << "Minivan seat options:\n";
+					cout << "1. Default seat $" << miniSeat << endl;
+					int seatOption;
+					cin >> seatOption;
+				}
+				seatType = "miniSeat";
+				curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), (curFleet[busOption - 1].getWinSeats() - tickets), curFleet[busOption - 1].getAisleSeats());
 			}
-			seatType = "miniSeat";
-			curFleet[busOption - 1].setSeats((curFleet[busOption - 1].getTotalSeats() - tickets), (curFleet[busOption - 1].getWinSeats() - tickets), curFleet[busOption - 1].getAisleSeats());
+
+			//Create Reservation object from user input
+			Reservation newReservation("Passenger", p, tickets, source, destination, curFleet[busOption - 1], seatType, monthOption, dayOption, yearOption, departOption);
+			calcTripCost(newReservation);
+			curReservations.push_back(newReservation);
+			listReservations(curReservations);
 		}
-
-		//Create Reservation object from user input
-		Reservation newReservation("Passenger", p, tickets, source, destination, curFleet[busOption - 1], seatType, monthOption, dayOption, yearOption, departOption);
-		calcTripCost(newReservation);
-		curReservations.push_back(newReservation);
-
+		else {
+			cout << "Reservation may only be made 2 weeks in advance\n";
+			createReservation();
+		}
 
 	}
 
@@ -1405,6 +1417,249 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 
 		}
 
-		viewIncome(curReservations);
+		adminMenu();
 	}
 
+	void viewReservation(const vector<Reservation>& newCurReservation) {
+		bool validDate = false;
+		int typeChoice;
+		int size = newCurReservation.size();
+
+		cout << "\nView Reservation by:\n";
+		cout << "1. Date\n";
+		cout << "2. Vehicle\n";
+		cin >> typeChoice;
+		while ((typeChoice < 1) || (typeChoice > 2)) {
+			cout << "Please enter either 1 or 2\n";
+			cout << "1. Date\n";
+			cout << "2. Vehicle\n";
+			cin >> typeChoice;
+		}
+
+		switch (typeChoice) {
+		case 1:
+			int monthOption;
+			do {
+				cout << "Please enter month:\n";
+				cin >> monthOption;
+				if (monthOption > 0 && monthOption < 13) {
+					validDate = true;
+				}
+				else {
+					cout << "MONTH MUST BE 1-12\n";
+					validDate = false;
+				}
+			} while (validDate == false);
+
+			int dayOption;
+			do {
+				cout << "Please enter day:\n";
+				cin >> dayOption;
+				if ((monthOption == 1 || monthOption == 3 || monthOption == 5 || monthOption == 7 || monthOption == 8 || monthOption == 10 || monthOption == 12) && (dayOption > 0 && dayOption <= 31)) {
+					validDate = true;
+				}
+				else if ((monthOption == 2) && dayOption <= 28) {
+					validDate = true;
+				}
+				else if ((monthOption == 4 || monthOption == 6 || monthOption == 9 || monthOption == 11) && (dayOption > 0 && dayOption <= 30)) {
+					validDate = true;
+				}
+				else {
+					cout << "INVALID DAY SELECTED\n";
+					validDate = false;
+				}
+			} while (validDate == false);
+
+			int yearOption;
+			do {
+				cout << "Please enter year:\n";
+				cin >> yearOption;
+				if (yearOption >= 2021) {
+					validDate = true;
+				}
+				else {
+					cout << "YEAR MUST BE 2021 OR GREATER\n";
+					validDate = false;
+				}
+			} while (validDate == false);
+
+			for (int i = 0; i < size; i++) {
+
+				if (newCurReservation[i].getMonth() == monthOption && newCurReservation[i].getDay() == dayOption && newCurReservation[i].getYear() == yearOption) {
+				
+					cout << "\nReservation " << (i + 1) << ":\n";
+					cout << "Customer: " << newCurReservation[i].getPassenger().getName() << endl;
+					cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
+					cout << "Source: " << newCurReservation[i].getSource() << endl;
+					cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+					cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+					cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
+					cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+					cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+					cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+					cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+					cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+					cout << endl;
+				}
+				else {
+					cout << "\nReservation " << (i + 1) << " did not match criteria\n";
+				}
+			}
+			break;
+
+		case 2:
+			int vehicleOption;
+			string vehicle;
+
+			cout << "Please select a vehicle type:\n";
+			cout << "1. Luxury\n";
+			cout << "2. Small\n";
+			cout << "3. Minivan\n";
+			cin >> vehicleOption;
+			while (vehicleOption < 1 || vehicleOption > 3) {
+				cout << "Please enter a number between 1 and 3\n";
+				cout << "Please select a vehicle type:\n";
+				cout << "1. Luxury\n";
+				cout << "2. Small\n";
+				cout << "3. Minivan\n";
+				cin >> vehicleOption;
+			}
+			switch (vehicleOption) {
+			case 1:
+				vehicle = "luxury";
+				break;
+			case 2:
+				vehicle = "small";
+				break;
+			case 3:
+				vehicle = "mini";
+				break;
+			}
+
+			for (int i = 0; i < size; i++) {
+
+				if (newCurReservation[i].getBus().getType() == vehicle) {
+					cout << "\nReservation " << (i + 1) << ":\n";
+					cout << "Customer: " << newCurReservation[i].getPassenger().getName() << endl;
+					cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
+					cout << "Source: " << newCurReservation[i].getSource() << endl;
+					cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+					cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+					cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
+					cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+					cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+					cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+					cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+					cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+					cout << endl;
+				}
+				else {
+					cout << "\nReservation " << (i + 1) << " did not match criteria\n";
+				}
+			}
+
+			break;
+
+		}
+
+		adminMenu();
+	}
+
+	bool checkDate(int year, int month, int day) {
+		double yearResDays;
+		double yearCurDays;
+		double dayResDays;
+		double dayCurDays;
+		double totalResDays;
+		double totalCurDays;
+
+		yearResDays = (year * 365);
+		yearCurDays = ((local_time->tm_year + 1900) * 365);
+
+		if (month == 1) {
+			dayResDays = day;
+		}
+		else if (month == 2) {
+			dayResDays = (31 + day);
+		}
+		else if (month == 3) {
+			dayResDays = (31 + 28 + day);
+		}
+		else if (month == 4) {
+			dayResDays = (31 + 28 + 31 + day);
+		}
+		else if (month == 5) {
+			dayResDays = (31 + 28 + 31 + 30 + day);
+		}
+		else if (month == 6) {
+			dayResDays = (31 + 28 + 31 + 30 + 31 + day);
+		}
+		else if (month == 7) {
+			dayResDays = (31 + 28 + 31 + 30 + 31 + 30 + day);
+		}
+		else if (month == 8) {
+			dayResDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + day);
+		}
+		else if (month == 9) {
+			dayResDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + day);
+		}
+		else if (month == 10) {
+			dayResDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + day);
+		}
+		else if (month == 11) {
+			dayResDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + day);
+		}
+		else{
+			dayResDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + day);
+		}
+
+		totalResDays = (yearResDays + dayResDays);
+
+		if ((local_time->tm_mon + 1) == 1) {
+			dayCurDays = local_time->tm_mday;
+		}
+		else if ((local_time->tm_mon + 1) == 2) {
+			dayCurDays = (31 + local_time->tm_mday);
+		}
+		else if ((local_time->tm_mon + 1) == 3) {
+			dayCurDays = (31 + 28 + local_time->tm_mday);
+		}
+		else if ((local_time->tm_mon + 1) == 4) {
+			dayCurDays = (31 + 28 + 31 + local_time->tm_mday);
+		}
+		else if ((local_time->tm_mon + 1) == 5) {
+			dayCurDays = (31 + 28 + 31 + 30 + local_time->tm_mday);
+		}
+		else if ((local_time->tm_mon + 1) == 6) {
+			dayCurDays = (31 + 28 + 31 + 30 + 31 + local_time->tm_mday);
+		}
+		else if ((local_time->tm_mon + 1) == 7) {
+			dayCurDays = (31 + 28 + 31 + 30 + 31 + 30 + local_time->tm_mday);
+		}
+		else if ((local_time->tm_mon + 1) == 8) {
+			dayCurDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + local_time->tm_mday);
+		}
+		else if ((local_time->tm_mon + 1) == 9) {
+			dayCurDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + local_time->tm_mday);
+		}
+		else if ((local_time->tm_mon + 1) == 10) {
+			dayCurDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + local_time->tm_mday);
+		}
+		else if ((local_time->tm_mon + 1) == 11) {
+			dayCurDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + local_time->tm_mday);
+		}
+		else {
+			dayCurDays = (31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + local_time->tm_mday);
+		}
+
+		totalCurDays = (yearCurDays + dayCurDays);
+
+
+		if ( (totalResDays - totalCurDays <= 14) && (totalResDays - totalCurDays > 0) ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	}
