@@ -9,6 +9,7 @@
 #include "Reservation.h"
 #include "Renter.h"
 #include <fstream>
+#include <iomanip>
 using namespace std;
 
 
@@ -98,7 +99,10 @@ void makeHire(Renter);
 void changeReservation();
 void viewIncome(const vector<Reservation>&);
 void viewReservation(const vector<Reservation>&);
-bool checkDate(int, int, int);
+int checkDate(int, int, int);
+void cancelReservation();
+
+
 
 //Testing time objects
 time_t ttime = time(0);
@@ -160,7 +164,8 @@ void mainMenu() {
 	cout << "1. Make a Reservation\n";
 	cout << "2. Hire a Bus\n";
 	cout << "3. View Ticket Rates\n";
-	cout << "4. Go Back\n";
+	cout << "4. Cancel a Reservation\n";
+	cout << "5. Go Back\n";
 	cin >> mainOption;
 
 	switch (mainOption) {
@@ -179,6 +184,8 @@ void mainMenu() {
 		mainMenu();
 		break;
 	case 4:
+		cancelReservation();
+	case 5:
 		initialMenu();
 	default:
 		cout << "Please select an option between 1 and 4\n";
@@ -364,6 +371,7 @@ void changeRates() { //Creates rates
 }
 
 void getRates() { //Gets and prints rates
+	cout << fixed << showpoint << setprecision(2);
 	cout << "\n------- Single Seat Rentals -------" << endl;
 	cout << "\n----- Luxury Bus -----" << endl;
 	cout << "Luxury bus aisle seat cost: $" << luxASeat << " per mile" << endl;
@@ -574,10 +582,9 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 				cout << "Passenger " << passOption << " does not exist\n";
 				cout << "\nPlease select a passenger to make a reservation:\n";
 				cin >> passOption;
-			}
+			}	
 			makeReservation(curPassengers[passOption - 1]);
 		}
-
 
 	}
 
@@ -634,7 +641,7 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			}
 		} while (validDate == false);
 
-		if (checkDate(yearOption, monthOption, dayOption) == true) {
+		if (checkDate(yearOption, monthOption, dayOption) <= 14) {
 			int departOption;
 			do {
 				cout << "Please enter depart time: (Military format)\n";
@@ -826,8 +833,17 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			listReservations(curReservations);
 		}
 		else {
-			cout << "Reservation may only be made 2 weeks in advance\n";
-			createReservation();
+			int passOption;
+			cout << "\nRESERVATION MAY ONLY BE MADE 2 WEEKS IN ADVANCE\n";
+			cout << "\nPlease select a passenger to make a reservation:\n";
+			listPassengers(curPassengers);
+			cin >> passOption;
+			while ((passOption <= 0) || (passOption > curPassengers.size())) {
+				cout << "Passenger " << passOption << " does not exist\n";
+				cout << "\nPlease select a passenger to make a reservation:\n";
+				cin >> passOption;
+			}
+			makeReservation(curPassengers[passOption - 1]);
 		}
 
 	}
@@ -1113,6 +1129,8 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 	}
 
 	void calcTripCost(Reservation &r) {
+
+		cout << fixed << showpoint << setprecision(2);
 		double cost = 0.0;
 		double distance;
 		double deposit;
@@ -1200,7 +1218,8 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		cout << "2. Change Depart Time\n";
 		cout << "3. Change Seat Type\n";
 		cout << "4. Modify Trip Cost\n";
-		cout << "5. Go Back\n";
+		cout << "5. Cancel Reservation\n";
+		cout << "6. Go Back\n";
 		int changeOption;
 		cin >> changeOption;
 		
@@ -1289,6 +1308,9 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			cout << "New Cost: " << curReservations[resOption - 1].getCost() << endl;
 			break;
 		case 5:
+			cancelReservation();
+			break;
+		case 6:
 			adminMenu();
 			break;
 		default:
@@ -1486,20 +1508,36 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			for (int i = 0; i < size; i++) {
 
 				if (newCurReservation[i].getMonth() == monthOption && newCurReservation[i].getDay() == dayOption && newCurReservation[i].getYear() == yearOption) {
+
+					if (newCurReservation[i].getResType() == "Passenger") {
+						cout << "\nReservation " << (i + 1) << ":\n";
+						cout << "Customer: " << newCurReservation[i].getPassenger().getName() << endl;
+						cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
+						cout << "Source: " << newCurReservation[i].getSource() << endl;
+						cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+						cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+						cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
+						cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+						cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+						cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+						cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+						cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+						cout << endl;
+					}
+					else {
+						cout << "\nReservation " << (i + 1) << ":\n";
+						cout << "Renter: " << newCurReservation[i].getRenter().getRName() << endl;
+						cout << "Source: " << newCurReservation[i].getSource() << endl;
+						cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+						cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+						cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+						cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+						cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+						cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+						cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+					}
 				
-					cout << "\nReservation " << (i + 1) << ":\n";
-					cout << "Customer: " << newCurReservation[i].getPassenger().getName() << endl;
-					cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
-					cout << "Source: " << newCurReservation[i].getSource() << endl;
-					cout << "Destination: " << newCurReservation[i].getDestination() << endl;
-					cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
-					cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
-					cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
-					cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
-					cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
-					cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
-					cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
-					cout << endl;
+					
 				}
 				else {
 					cout << "\nReservation " << (i + 1) << " did not match criteria\n";
@@ -1539,19 +1577,33 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			for (int i = 0; i < size; i++) {
 
 				if (newCurReservation[i].getBus().getType() == vehicle) {
-					cout << "\nReservation " << (i + 1) << ":\n";
-					cout << "Customer: " << newCurReservation[i].getPassenger().getName() << endl;
-					cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
-					cout << "Source: " << newCurReservation[i].getSource() << endl;
-					cout << "Destination: " << newCurReservation[i].getDestination() << endl;
-					cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
-					cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
-					cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
-					cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
-					cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
-					cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
-					cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
-					cout << endl;
+					if (newCurReservation[i].getResType() == "Passenger") {
+						cout << "\nReservation " << (i + 1) << ":\n";
+						cout << "Customer: " << newCurReservation[i].getPassenger().getName() << endl;
+						cout << "Total Passengers: " << newCurReservation[i].getTotalPassengers() << endl;
+						cout << "Source: " << newCurReservation[i].getSource() << endl;
+						cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+						cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+						cout << "Seat Type: " << newCurReservation[i].getSeat() << endl;
+						cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+						cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+						cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+						cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+						cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+						cout << endl;
+					}
+					else {
+						cout << "\nReservation " << (i + 1) << ":\n";
+						cout << "Renter: " << newCurReservation[i].getRenter().getRName() << endl;
+						cout << "Source: " << newCurReservation[i].getSource() << endl;
+						cout << "Destination: " << newCurReservation[i].getDestination() << endl;
+						cout << "Bus Type: " << newCurReservation[i].getBus().getType() << endl;
+						cout << "Day of Departure: " << newCurReservation[i].getDay() << endl;
+						cout << "Month of Departure: " << newCurReservation[i].getMonth() << endl;
+						cout << "Year of Departure: " << newCurReservation[i].getYear() << endl;
+						cout << "Time of Departure: " << newCurReservation[i].getDepartTime() << ":00" << endl;
+						cout << "Total Cost: $" << newCurReservation[i].getCost() << endl;
+					}
 				}
 				else {
 					cout << "\nReservation " << (i + 1) << " did not match criteria\n";
@@ -1565,7 +1617,7 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		adminMenu();
 	}
 
-	bool checkDate(int year, int month, int day) {
+	int checkDate(int year, int month, int day) {
 		double yearResDays;
 		double yearCurDays;
 		double dayResDays;
@@ -1655,11 +1707,38 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		totalCurDays = (yearCurDays + dayCurDays);
 
 
-		if ( (totalResDays - totalCurDays <= 14) && (totalResDays - totalCurDays > 0) ) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return (totalResDays - totalCurDays);
 
 	}
+
+	void cancelReservation() {
+		cout << fixed << showpoint << setprecision(2);
+		int passOption;
+
+		cout << "\nPlease select a passenger to cancel a reservation:\n";
+		listPassengers(curPassengers);
+		cin >> passOption;
+		while ((passOption <= 0) || (passOption > curPassengers.size())) {
+			cout << "Passenger " << passOption << " does not exist\n";
+			cout << "\nPlease select a passenger to make a reservation:\n";
+			cin >> passOption;
+			cout << endl;
+		}
+
+		if (checkDate(curReservations[passOption-1].getYear(), curReservations[passOption - 1].getMonth(), curReservations[passOption - 1].getDay()) == 7
+			|| checkDate(curReservations[passOption - 1].getYear(), curReservations[passOption - 1].getMonth(), curReservations[passOption - 1].getDay()) == 2) { 
+			cout << "Refund Amount: " << curReservations[passOption-1].getCost() << endl;
+			
+		}
+		else if (checkDate(curReservations[passOption - 1].getYear(), curReservations[passOption - 1].getMonth(), curReservations[passOption - 1].getDay()) < 7 
+			&& checkDate(curReservations[passOption - 1].getYear(), curReservations[passOption - 1].getMonth(), curReservations[passOption - 1].getDay()) > 1) { 
+			cout << "30% Penalty due to cancelling less than one week in advance\n";
+			cout << "Refund Amount: " << (curReservations[passOption - 1].getCost() * 0.7) << endl;
+			
+		}
+		else {
+			cout << "No refund due to cancelling one day before travel\n";
+		}
+		//Figure out how to delete objects from vector
+	}
+	
