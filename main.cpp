@@ -104,7 +104,7 @@ void cancelReservation();
 
 
 
-//Testing time objects
+//Time objects
 time_t ttime = time(0);
 tm* local_time = localtime(&ttime);
 
@@ -660,60 +660,20 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 
 
 			//Source
-			cout << "Please select a source: \n";
-			cout << "1. Green Bay\n";
-			cout << "2. Madison\n";
-			cout << "3. Milwaukee\n";
-			cout << "4. Whitewater\n";
-			cout << "5. Oshkosh\n";
-			cout << "6. Eau Claire\n";
-			int sourceOption;
-			cin >> sourceOption;
-			while ((sourceOption <= 0) || (sourceOption > 6)) {
-				cout << "Please select an option between 1 and 6\n";
-				cout << "Please select a source from the list above: ";
-				cin >> sourceOption;
-			}
+			string source = "Green Bay";
 
-			string source;
-			switch (sourceOption) {
-			case 1:
-				source = "Green Bay";
-				break;
-			case 2:
-				source = "Madison";
-				break;
-			case 3:
-				source = "Milwaukee";
-				break;
-			case 4:
-				source = "Whitewater";
-				break;
-			case 5:
-				source = "Oshkosh";
-				break;
-			case 6:
-				source = "Eau Claire";
-				break;
-			}
 
 			//Destination
 			cout << "Please select a destination:\n";
-			cout << "1. Green Bay\n";
-			cout << "2. Madison\n";
-			cout << "3. Milwaukee\n";
-			cout << "4. Whitewater\n";
-			cout << "5. Oshkosh\n";
-			cout << "6. Eau Claire\n";
+			cout << "1. Madison\n";
+			cout << "2. Milwaukee\n";
+			cout << "3. Whitewater\n";
+			cout << "4. Oshkosh\n";
+			cout << "5. Eau Claire\n";
 			int destOption;
 			cin >> destOption;
-			while ((destOption <= 0) || (destOption > 6)) {
-				cout << "Please select an option between 1 and 6\n";
-				cout << "Please select a destination from the list above: ";
-				cin >> destOption;
-			}
-			while (sourceOption == destOption) {
-				cout << "Source and destination must be different\n";
+			while ((destOption <= 0) || (destOption > 5)) {
+				cout << "Please select an option between 1 and 5\n";
 				cout << "Please select a destination from the list above: ";
 				cin >> destOption;
 			}
@@ -721,25 +681,20 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			string destination;
 			switch (destOption) {
 			case 1:
-				destination = "Green Bay";
-				break;
-			case 2:
 				destination = "Madison";
 				break;
-			case 3:
+			case 2:
 				destination = "Milwaukee";
 				break;
-			case 4:
+			case 3:
 				destination = "Whitewater";
 				break;
-			case 5:
+			case 4:
 				destination = "Oshkosh";
 				break;
-			case 6:
+			case 5:
 				destination = "Eau Claire";
 				break;
-			default:
-				cout << "Invalid choice";
 			}
 
 			//Bus Selection
@@ -895,7 +850,9 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		if (fileReservationIn.is_open()) {
 			while (getline(fileReservationIn, line, '\t')) {
 				fileReservationIn >> line;
+				cout << endl;
 				cout << line << endl;
+				cout << endl;
 			}
 			fileReservationOut.close(); // Close the file
 		}
@@ -1009,61 +966,19 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			}
 		} while (validDate == false);
 
-		//Source
-		cout << "Please select a source: \n";
-		cout << "1. Green Bay\n";
-		cout << "2. Madison\n";
-		cout << "3. Milwaukee\n";
-		cout << "4. Whitewater\n";
-		cout << "5. Oshkosh\n";
-		cout << "6. Eau Claire\n";
-		int sourceOption;
-		cin >> sourceOption;
-		while ((sourceOption <= 0) || (sourceOption > 6)) {
-			cout << "Please select an option between 1 and 6\n";
-			cout << "Please select a source from the list above: ";
-			cin >> sourceOption;
-		}
 
-		string source;
-		switch (sourceOption) {
-		case 1:
-			source = "Green Bay";
-			break;
-		case 2:
-			source = "Madison";
-			break;
-		case 3:
-			source = "Milwaukee";
-			break;
-		case 4:
-			source = "Whitewater";
-			break;
-		case 5:
-			source = "Oshkosh";
-			break;
-		case 6:
-			source = "Eau Claire";
-			break;
-		}
 
 		//Destination
 		cout << "Please select a destination:\n";
-		cout << "1. Green Bay\n";
-		cout << "2. Madison\n";
-		cout << "3. Milwaukee\n";
-		cout << "4. Whitewater\n";
-		cout << "5. Oshkosh\n";
-		cout << "6. Eau Claire\n";
+		cout << "1. Madison\n";
+		cout << "2. Milwaukee\n";
+		cout << "3. Whitewater\n";
+		cout << "4. Oshkosh\n";
+		cout << "5. Eau Claire\n";
 		int destOption;
 		cin >> destOption;
-		while ((destOption <= 0) || (destOption > 6)) {
-			cout << "Please select an option between 1 and 6\n";
-			cout << "Please select a destination from the list above: ";
-			cin >> destOption;
-		}
-		while (sourceOption == destOption) {
-			cout << "Source and destination must be different\n";
+		while ((destOption <= 0) || (destOption > 5)) {
+			cout << "Please select an option between 1 and 5\n";
 			cout << "Please select a destination from the list above: ";
 			cin >> destOption;
 		}
@@ -1071,26 +986,23 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		string destination;
 		switch (destOption) {
 		case 1:
-			destination = "Green Bay";
-			break;
-		case 2:
 			destination = "Madison";
 			break;
-		case 3:
+		case 2:
 			destination = "Milwaukee";
 			break;
-		case 4:
+		case 3:
 			destination = "Whitewater";
 			break;
-		case 5:
+		case 4:
 			destination = "Oshkosh";
 			break;
-		case 6:
+		case 5:
 			destination = "Eau Claire";
 			break;
 		}
 
-		Reservation newHire("Hire", r, source, destination, b, monthOption, dayOption, yearOption, departOption);
+		Reservation newHire("Hire", r, b.getLocation(), destination, b, monthOption, dayOption, yearOption, departOption);
 		calcTripCost(newHire);
 		curReservations.push_back(newHire);
 		listReservations(curReservations);
@@ -1138,21 +1050,109 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		double rent;
 
 		//Calculate distance depending on source and destination combo
-		if (r.getSource() == "Green Bay" && r.getDestination() == "Madison") {
-			distance = 135.6;
+		if (r.getSource() == "Green Bay") {
+			if (r.getDestination() == "Madison") {
+				distance = 135.6;
+			}
+			else if (r.getDestination() == "Milwaukee") {
+				distance = 118.7;
+			}
+			else if (r.getDestination() == "Whitewater") {
+				distance = 142.2;
+			}
+			else if (r.getDestination() == "Oshkosh") {
+				distance = 50.4;
+			}
+			else {
+				distance = 194.4;
+			}
 		}
-		else if (r.getSource() == "Green Bay" && r.getDestination() == "Milwaukee") {
-			distance = 118.7;
+		else if (r.getSource() == "Madison") {
+			if (r.getDestination() == "Green Bay") {
+				distance = 135.6;
+			}
+			else if (r.getDestination() == "Milwaukee") {
+				distance = 79.6;
+			}
+			else if (r.getDestination() == "Whitewater") {
+				distance = 45.3;
+			}
+			else if (r.getDestination() == "Oshkosh") {
+				distance = 89.3;
+			}
+			else {
+				distance = 178;
+			}
 		}
-		else if (r.getSource() == "Green Bay" && r.getDestination() == "Whitewater") {
-			distance = 142.2;
+		else if (r.getSource() == "Milwaukee") {
+			if (r.getDestination() == "Green Bay") {
+				distance = 118.7;
+			}
+			else if (r.getDestination() == "Madison") {
+				distance = 79.6;
+			}
+			else if (r.getDestination() == "Whitewater") {
+				distance = 52.9;
+			}
+			else if (r.getDestination() == "Oshkosh") {
+				distance = 87.5;
+			}
+			else {
+				distance = 245;
+			}
 		}
-		else if (r.getSource() == "Green Bay" && r.getDestination() == "Oshkosh") {
-			distance = 50.4;
+		else if (r.getSource() == "Whitewater") {
+			if (r.getDestination() == "Green Bay") {
+				distance = 142.2;
+			}
+			else if (r.getDestination() == "Madison") {
+				distance = 45.3;
+			}
+			else if (r.getDestination() == "Milwaukee") {
+				distance = 52.9;
+			}
+			else if (r.getDestination() == "Oshkosh") {
+				distance = 92.5;
+			}
+			else {
+				distance = 215;
+			}
+		}
+		else if (r.getSource() == "Oshkosh") {
+			if (r.getDestination() == "Green Bay") {
+				distance = 50.4;
+			}
+			else if (r.getDestination() == "Madison") {
+				distance = 89.3;
+			}
+			else if (r.getDestination() == "Milwaukee") {
+				distance = 87.5;
+			}
+			else if (r.getDestination() == "Whitewater") {
+				distance = 92.5;
+			}
+			else {
+				distance = 182;
+			}
 		}
 		else {
-			distance = 194.4;
+			if (r.getDestination() == "Green Bay") {
+				distance = 194.4;
+			}
+			else if (r.getDestination() == "Madison") {
+				distance = 178;
+			}
+			else if (r.getDestination() == "Milwaukee") {
+				distance = 245;
+			}
+			else if (r.getDestination() == "Oshkosh") {
+				distance = 182;
+			}
+			else {
+				distance = 215;
+			}
 		}
+		
 
 		if (r.getResType() == "Passenger") { //Passenger reservation cost
 
@@ -1739,6 +1739,12 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		else {
 			cout << "No refund due to cancelling one day before travel\n";
 		}
-		//Figure out how to delete objects from vector
+		//Delete Reservation object from vector
+		if (passOption == 1) {
+			curReservations.erase(curReservations.begin());
+		}
+		else {
+			curReservations.erase(curReservations.begin() + (passOption-1));
+		}
 	}
 	
