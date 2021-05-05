@@ -131,7 +131,7 @@ int main() {
 void initialMenu() {
 	int initialOption;
 
-	cout << "FLIXBUX System Menu\n";
+	cout << "---FLIXBUX SYSTEM MENU---\n";
 	cout << "Please select an option below:\n";
 	cout << "1. Main Menu\n";
 	cout << "2. Admin Menu\n";
@@ -159,7 +159,7 @@ void mainMenu() {
 
 	int mainOption;
 
-	cout << "FLIXBUS MAIN MENU\n";
+	cout << "---FLIXBUS MAIN MENU---\n";
 	cout << "Please select an option below:\n";
 	cout << "1. Make a Reservation\n";
 	cout << "2. Hire a Bus\n";
@@ -185,6 +185,7 @@ void mainMenu() {
 		break;
 	case 4:
 		cancelReservation();
+		listReservations(curReservations);
 	case 5:
 		initialMenu();
 	default:
@@ -198,7 +199,7 @@ void mainMenu() {
 
 
 void createPassengers(vector<Passenger>& newCurPassengers) { //Dynamically create Passenger objects
-	cout << "\nCUSTOMER CREATION\n";
+	cout << "\n---CUSTOMER CREATION---\n";
 	cout << "How many customer profiles would you like to make? ";
 	cin >> numPassengers;
 
@@ -403,7 +404,7 @@ void adminMenu() { //Admin Menu
 
 	int adminOption;
 
-	cout << "\n----- Admin Menu -----";
+	cout << "\n---Admin Menu ---";
 cout << "Please select an option below:" << endl;
 cout << "1. Add vehicle to fleet" << endl;
 cout << "2. View reservations" << endl;
@@ -560,14 +561,16 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		 int size = newCurFleet.size();
 
 		for ( int i = 1; i < (size+1); i++) {
-			cout << "\nVehicle ID: " << newCurFleet[i-1].getID() << endl;
-			cout << "Vehicle Type: " << newCurFleet[i-1].getType() << endl;
-			cout << "Availability: " << newCurFleet[i-1].getAvailability() << endl;
-			cout << "Total Seats: " << newCurFleet[i-1].getTotalSeats() << endl;
-			cout << "Window Seats: " << newCurFleet[i-1].getWinSeats() << endl;
-			cout << "Aisle Seats: " << newCurFleet[i-1].getAisleSeats() << endl;
-			cout << "Depot Location: " << newCurFleet[i-1].getLocation() << endl;
-			cout << endl;
+			if (newCurFleet[i - 1].getAvailability() == true) {
+				cout << "\nVehicle ID: " << newCurFleet[i - 1].getID() << endl;
+				cout << "Vehicle Type: " << newCurFleet[i - 1].getType() << endl;
+				cout << "Availability: " << newCurFleet[i - 1].getAvailability() << endl;
+				cout << "Total Seats: " << newCurFleet[i - 1].getTotalSeats() << endl;
+				cout << "Window Seats: " << newCurFleet[i - 1].getWinSeats() << endl;
+				cout << "Aisle Seats: " << newCurFleet[i - 1].getAisleSeats() << endl;
+				cout << "Depot Location: " << newCurFleet[i - 1].getLocation() << endl;
+				cout << endl;
+			}			
 		}
 	}
 
@@ -657,46 +660,6 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 				}
 			} while (validDate == false);
 
-
-
-			//Source
-			string source = "Green Bay";
-
-
-			//Destination
-			cout << "Please select a destination:\n";
-			cout << "1. Madison\n";
-			cout << "2. Milwaukee\n";
-			cout << "3. Whitewater\n";
-			cout << "4. Oshkosh\n";
-			cout << "5. Eau Claire\n";
-			int destOption;
-			cin >> destOption;
-			while ((destOption <= 0) || (destOption > 5)) {
-				cout << "Please select an option between 1 and 5\n";
-				cout << "Please select a destination from the list above: ";
-				cin >> destOption;
-			}
-
-			string destination;
-			switch (destOption) {
-			case 1:
-				destination = "Madison";
-				break;
-			case 2:
-				destination = "Milwaukee";
-				break;
-			case 3:
-				destination = "Whitewater";
-				break;
-			case 4:
-				destination = "Oshkosh";
-				break;
-			case 5:
-				destination = "Eau Claire";
-				break;
-			}
-
 			//Bus Selection
 			listBus(curFleet);
 			cout << "Select a bus from the list above:\n";
@@ -708,6 +671,78 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 				cin >> busOption;
 			}
 
+
+			//Source
+			string source = curFleet[busOption - 1].getLocation();
+
+
+			//Destination
+			cout << "Please select a destination:\n";
+			cout << "1. Green Bay\n";
+			cout << "2. Madison\n";
+			cout << "3. Milwaukee\n";
+			cout << "4. Whitewater\n";
+			cout << "5. Oshkosh\n";
+			cout << "6. Eau Claire\n";
+			int destOption;
+			cin >> destOption;
+			while ((destOption <= 0) || (destOption > 6)) {
+				cout << "Please select an option between 1 and 6\n";
+				cout << "Please select a destination from the list above: ";
+				cin >> destOption;
+			}
+			
+			string destination;
+			switch (destOption) {
+			case 1:
+				destination = "Green Bay";
+				break;
+			case 2:
+				destination = "Madison";
+				break;
+			case 3:
+				destination = "Milwaukee";
+				break;
+			case 4:
+				destination = "Whitewater";
+				break;
+			case 5:
+				destination = "Oshkosh";
+				break;
+			case 6:
+				destination = "Eau Claire";
+				break;
+			}
+
+			while (curFleet[busOption - 1].getLocation() == destination) {
+				cout << "Source and destination must differ\n";
+				cout << "Please select a destination from the list above: ";
+				cin >> destOption;
+				switch (destOption) {
+				case 1:
+					destination = "Green Bay";
+					break;
+				case 2:
+					destination = "Madison";
+					break;
+				case 3:
+					destination = "Milwaukee";
+					break;
+				case 4:
+					destination = "Whitewater";
+					break;
+				case 5:
+					destination = "Oshkosh";
+					break;
+				case 6:
+					destination = "Eau Claire";
+					break;
+				}
+			}
+
+			
+			
+			int seatOption;
 			string seatType; //Holds seatType for reservation object
 			cout << "Select a seat from the list:\n";
 			if (curFleet[busOption - 1].getType() == "luxury") {
@@ -715,7 +750,6 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 				cout << "1. Luxury Aisle: $" << luxASeat << endl;
 				cout << "2. Luxury Window: $" << luxWSeat << endl;
 				cout << "3. Luxury Middle: $" << luxOSeat << endl;
-				int seatOption;
 				cin >> seatOption;
 				while (seatOption < 1 || seatOption > 3) {
 					cout << "Invalid seat selection\n";
@@ -751,7 +785,6 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 					cout << "Small Bus seat options:\n";
 					cout << "1. Small Aisle: $" << smallASeat << endl;
 					cout << "2. Small Window: $" << smallWSeat << endl;
-					int seatOption;
 					cin >> seatOption;
 				}
 				switch (seatOption) {
@@ -770,11 +803,10 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 				cout << "1. Default seat $" << miniSeat << endl;
 				int seatOption;
 				cin >> seatOption;
-				while (seatOption < 1 || seatOption > 1) {
+				while (seatOption != 1) {
 					cout << "Invalid seat selection\n";
 					cout << "Minivan seat options:\n";
 					cout << "1. Default seat $" << miniSeat << endl;
-					int seatOption;
 					cin >> seatOption;
 				}
 				seatType = "miniSeat";
@@ -899,8 +931,7 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		cout << "Window Seats: " << curFleet[ID - 1].getWinSeats() << endl;
 		cout << "Aisle Seats: " << curFleet[ID - 1].getAisleSeats() << endl;
 		cout << "Depot Location: " << curFleet[ID - 1].getLocation() << endl;
-		Bus b = curFleet[ID - 1];
-		b.setAvailability(false); //Change availability of selected bus	
+		curFleet[ID - 1].setAvailability(false);//Change availability of selected bus
 
 		//Ask for Reservation info
 		bool validDate = false;
@@ -970,15 +1001,16 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 
 		//Destination
 		cout << "Please select a destination:\n";
-		cout << "1. Madison\n";
-		cout << "2. Milwaukee\n";
-		cout << "3. Whitewater\n";
-		cout << "4. Oshkosh\n";
-		cout << "5. Eau Claire\n";
+		cout << "1. Green Bay\n";
+		cout << "2. Madison\n";
+		cout << "3. Milwaukee\n";
+		cout << "4. Whitewater\n";
+		cout << "5. Oshkosh\n";
+		cout << "6. Eau Claire\n";
 		int destOption;
 		cin >> destOption;
-		while ((destOption <= 0) || (destOption > 5)) {
-			cout << "Please select an option between 1 and 5\n";
+		while ((destOption <= 0) || (destOption > 6)) {
+			cout << "Please select an option between 1 and 6\n";
 			cout << "Please select a destination from the list above: ";
 			cin >> destOption;
 		}
@@ -986,30 +1018,33 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 		string destination;
 		switch (destOption) {
 		case 1:
-			destination = "Madison";
+			destination = "Green Bay";
 			break;
 		case 2:
-			destination = "Milwaukee";
+			destination = "Madison";
 			break;
 		case 3:
-			destination = "Whitewater";
+			destination = "Milwaukee";
 			break;
 		case 4:
-			destination = "Oshkosh";
+			destination = "Whitewater";
 			break;
 		case 5:
+			destination = "Oshkosh";
+			break;
+		case 6:
 			destination = "Eau Claire";
 			break;
 		}
 
-		Reservation newHire("Hire", r, b.getLocation(), destination, b, monthOption, dayOption, yearOption, departOption);
+		Reservation newHire("Hire", r, curFleet[ID-1].getLocation(), destination, curFleet[ID-1], monthOption, dayOption, yearOption, departOption);
 		calcTripCost(newHire);
 		curReservations.push_back(newHire);
 		listReservations(curReservations);
 	}
 
 	void createRenter(vector<Renter>& newCurRenters) {
-		cout << "\nRENTER CREATION\n";
+		cout << "\n---RENTER CREATION---\n";
 		cout << "How many renter profiles would you like to make?: ";
 		cin >> numRenters;
 		cout << "\nEnter Renter Information: " << endl;
@@ -1725,7 +1760,7 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			cout << endl;
 		}
 
-		if (checkDate(curReservations[passOption-1].getYear(), curReservations[passOption - 1].getMonth(), curReservations[passOption - 1].getDay()) == 7
+		if (checkDate(curReservations[passOption-1].getYear(), curReservations[passOption - 1].getMonth(), curReservations[passOption - 1].getDay()) >= 7
 			|| checkDate(curReservations[passOption - 1].getYear(), curReservations[passOption - 1].getMonth(), curReservations[passOption - 1].getDay()) == 2) { 
 			cout << "Refund Amount: " << curReservations[passOption-1].getCost() << endl;
 			
@@ -1744,7 +1779,7 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			curReservations.erase(curReservations.begin());
 		}
 		else {
-			curReservations.erase(curReservations.begin() + (passOption-1));
+			curReservations.erase(curReservations.begin() + (passOption-1)); //DOUBLE CHECK THIS WORKS CORRECTLY
 		}
 	}
 	
