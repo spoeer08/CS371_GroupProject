@@ -477,12 +477,12 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			cout << "Please enter either 0 or 1\n";
 			cout << "Enter availability: (0=No, 1=Yes)";
 			cin >> intAvailability;
-			if (intAvailability == 0) {
-				availability = false;
-			}
-			else {
-				availability = true;
-			}
+		}
+		if (intAvailability == 0) {
+			availability = false;
+		}
+		else {
+			availability = true;
 		}
 		cout << "Enter total seats: " << endl;
 		cin >> totalSeats;
@@ -1779,7 +1779,7 @@ void createBus(vector<Bus>& newCurFleet) { //Dynamically adds vehicles to fleet
 			curReservations.erase(curReservations.begin());
 		}
 		else {
-			curReservations.erase(curReservations.begin() + (passOption-1)); //DOUBLE CHECK THIS WORKS CORRECTLY
+			curReservations.erase(curReservations.begin() + (passOption-1));
 		}
 	}
 	
